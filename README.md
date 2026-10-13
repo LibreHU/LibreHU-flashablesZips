@@ -13,7 +13,7 @@ TWRP, ou écriture directe d'une image en root).
 | `drivers` | `viper4android-re` / `-restore` | pilote **ViPER4Android RE** (`libv4a_re.so` du module officiel [ViPERFX_RE](https://github.com/likelikeslike/ViPERFX_RE) v2.1.1, empreinte vérifiée) dans `/vendor/lib[64]/soundfx` + déclaration dans `audio_effects.xml`, sans Magisk ; et son retrait |
 | `tweaks` | `no-deep-buffer` / `-restore` | sortie audio `deep_buffer` retirée de la politique audio (musique muette, sonneries OK) ; et sa remise |
 | `updates` | — | à venir |
-| `kernel` | — | à venir |
+| `kernel` | `usb-net` / `-restore` | pilotes **réseau USB** absents du noyau stock (4.9.117+, Jancar #25 et #72) : adaptateurs Ethernet **Realtek RTL8152 / RTL8153**, **partage de connexion USB** d'un téléphone Android (RNDIS) et d'un iPhone (expérimental), LAN78xx, LAN95xx / 75xx, DM9601, SR9700 / SR9800, MCS7830, CH9200, RTL8150, Pegasus, CDC EEM ; modules dans `/vendor/lib/modules/librehu-usbnet`, chargés une fois Android démarré avec protection contre les redémarrages (source et vérification des CRC : `tools/usbnet` du dépôt de l'appareil) ; et leur retrait |
 
 Les zips qui modifient `/vendor` ou `/system` s'arrêtent **sans rien modifier** si la partition est protégée par
 dm-verity (l'autoradio ne démarrerait plus) : la désactiver d'abord (`fastboot --disable-verity flash vbmeta vbmeta.img`).

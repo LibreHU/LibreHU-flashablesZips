@@ -1,0 +1,12 @@
+{
+  "id": "usb-net",
+  "name": "Ethernet USB et partage de connexion USB",
+  "category": "kernel",
+  "description": "Pilotes réseau USB absents du noyau stock (4.9.117+, #25 et #72) : adaptateurs Realtek RTL8152 / RTL8153 (les plus courants), partage de connexion USB d'un téléphone Android (RNDIS) et d'un iPhone (expérimental), Microchip LAN78xx, SMSC LAN95xx / LAN75xx, Davicom DM9601, CoreChips SR9700 / SR9800, MosChip MCS7830, QinHeng CH9200, RTL8150, Pegasus, CDC EEM. Modules dans /vendor/lib/modules/librehu-usbnet, chargés une fois Android démarré, avec une protection : un redémarrage pendant le chargement les désactive au démarrage suivant. Les ASIX AX88179 / AX88772 et les adaptateurs CDC ECM / NCM marchent déjà sans ce zip.",
+  "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Uniquement pour le noyau stock Jancar 4.9.117+ (ou la reconstruction LibreHU).",
+  "devices": ["ac8257_demo"],
+  "restore": "usb-net-restore",
+  "upstream": "https://github.com/LibreHU/android_device_alps_ac8257_demo/tree/ccr-eca2d7b0-vz26un/tools/usbnet",
+  "license": "GPL-2.0 (pilotes Linux 4.9)",
+  "version": "1"
+}

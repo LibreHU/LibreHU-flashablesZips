@@ -1,0 +1,9 @@
+{
+  "id": "usb-net-restore",
+  "name": "Ethernet USB : retrait des pilotes",
+  "category": "kernel",
+  "description": "Supprime les modules de /vendor/lib/modules/librehu-usbnet et leur script de chargement.",
+  "devices": ["ac8257_demo"],
+  "hidden": true,
+  "version": "1"
+}
