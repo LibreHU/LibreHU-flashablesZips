@@ -1,0 +1,9 @@
+{
+  "categories": [
+    {"id": "recovery", "name": "Recovery", "name_fr": "Recovery", "description_fr": "TWRP et outils de recovery"},
+    {"id": "drivers", "name": "Drivers", "name_fr": "Pilotes", "description_fr": "Pilotes audio, vidéo, matériel"},
+    {"id": "tweaks", "name": "Tweaks", "name_fr": "Réglages", "description_fr": "Modifications de configuration du système"},
+    {"id": "updates", "name": "Updates", "name_fr": "Mises à jour", "description_fr": "Mises à jour du système, des applis système, du firmware"},
+    {"id": "kernel", "name": "Kernel", "name_fr": "Noyau", "description_fr": "Noyaux et modules"}
+  ]
+}

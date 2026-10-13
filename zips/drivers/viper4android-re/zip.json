@@ -1,0 +1,12 @@
+{
+  "id": "viper4android-re",
+  "name": "ViPER4Android RE : pilote (sans Magisk)",
+  "category": "drivers",
+  "description": "Installe le pilote libv4a_re.so dans /vendor/lib[64]/soundfx et le déclare dans audio_effects.xml (effet v4a_standard_re), sans Magisk. Puis installer l'appli ViPER4Android (LibreHU Apps).",
+  "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier.",
+  "devices": ["ac8257_demo"],
+  "restore": "viper4android-re-restore",
+  "upstream": "https://github.com/likelikeslike/ViPERFX_RE",
+  "license": "GPL-2.0 (pilote ViPERFX_RE)",
+  "version_from": "prepare"
+}

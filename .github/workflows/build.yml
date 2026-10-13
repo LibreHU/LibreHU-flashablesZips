@@ -1,0 +1,54 @@
+name: Build zips
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Every day: picks up a new TWRP release of the device repository.
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zips
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the zips and index.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/build.py
+
+      - name: Publish (release "zips")
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=zips
+          {
+            echo "Zips flashables LibreHU, construits par la CI depuis \`zips/\` (commit ${GITHUB_SHA::7})."
+            echo
+            echo "Index pour LibreHU Apps : \`index.json\`."
+            echo
+            python3 -c "import json;d=json.load(open('dist/index.json'));[print(f\"- **{z['name']}** ({z['category']}, {z['version']}) : \`{z['id']}.zip\`\") for z in d['zips']]"
+          } > notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "Zips flashables" --notes-file notes.md --latest
+          else
+            gh release create "$TAG" --title "Zips flashables" --notes-file notes.md --latest
+          fi
+          gh release upload "$TAG" dist/* --clobber
+          # Assets no longer built (zip removed or renamed) are deleted.
+          for a in $(gh release view "$TAG" --json assets --jq '.assets[].name'); do
+            [ -e "dist/$a" ] || gh release delete-asset "$TAG" "$a" -y
+          done
+
+      - name: Fail when a zip did not build
+        run: |
+          if [ -f build/failed.txt ]; then echo "Not built:"; cat build/failed.txt; exit 1; fi

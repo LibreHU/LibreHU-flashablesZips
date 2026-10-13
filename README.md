@@ -1,0 +1,50 @@
+# LibreHU flashable zips
+
+Zips flashables (TWRP) pour les autoradios Jancar / Autochips AC8257 (UJC201), classés par **catégories**, construits
+par la CI et publiés dans la release [`zips`](../../releases/tag/zips) avec un **`index.json`** que lit
+[LibreHU Apps (OTA)](https://github.com/LibreHU/LibreHU-OTA-app) (onglet **Zips** : filtre par catégorie, flash par
+TWRP, ou écriture directe d'une image en root).
+
+## Catégories et zips
+
+| Catégorie | Zip | Rôle |
+|---|---|---|
+| `recovery` | `twrp-ujc201` | **dernière release TWRP** UJC201 du dépôt [android_device_alps_ac8257_demo](https://github.com/LibreHU/android_device_alps_ac8257_demo/releases) (reprise chaque jour par la CI), vérifiée puis écrite dans la partition recovery, l'actuelle sauvegardée dans `/sdcard/LibreHU/backup` ; l'image seule est publiée aussi (`twrp-ujc201.img`) |
+| `drivers` | `viper4android-re` / `-restore` | pilote **ViPER4Android RE** (`libv4a_re.so` du module officiel [ViPERFX_RE](https://github.com/likelikeslike/ViPERFX_RE) v2.1.1, empreinte vérifiée) dans `/vendor/lib[64]/soundfx` + déclaration dans `audio_effects.xml`, sans Magisk ; et son retrait |
+| `tweaks` | `no-deep-buffer` / `-restore` | sortie audio `deep_buffer` retirée de la politique audio (musique muette, sonneries OK) ; et sa remise |
+| `updates` | — | à venir |
+| `kernel` | — | à venir |
+
+Les zips qui modifient `/vendor` ou `/system` s'arrêtent **sans rien modifier** si la partition est protégée par
+dm-verity (l'autoradio ne démarrerait plus) : la désactiver d'abord (`fastboot --disable-verity flash vbmeta vbmeta.img`).
+Chaque zip vérifie l'appareil (`ro.product.device` = `ac8257_demo`).
+
+## Ajouter un zip
+Un dossier `zips/<catégorie>/<id>/` :
+- `zip.json` : `id`, `name`, `category` (une de [categories.json](categories.json)), `description`, et selon le cas
+  `warning`, `devices` (valeurs de `ro.product.device`), `restore` (id du zip qui annule), `hidden` (zip de
+  restauration, montré seulement depuis l'autre), `version` (ou écrite par `prepare.sh`), `image` + `partition`
+  (image aussi publiée seule, que l'appli peut écrire directement), `upstream`, `license` ;
+- `install.sh` : corps de `update-binary`, après [common/twrp-common.sh](common/twrp-common.sh) (`ui_print`, `abort`,
+  `mount_rw`, `require_no_verity`, `$SDCARD`…) et la vérification de l'appareil ; variables `$ZIPFILE`, `$VERSION` ;
+- facultatif : `files/` (mis dans le zip sous `files/`) et `prepare.sh <dossier>` (remplit `<dossier>/files` et
+  `<dossier>/version` avant l'empaquetage : téléchargement d'une release, avec vérification d'empreinte).
+
+`python3 tools/build.py` construit tout dans `dist/` (zips, images, `index.json`) ; la CI le fait à chaque push et
+chaque jour, puis publie la release `zips` (les fichiers qui ne sont plus construits sont retirés).
+
+## index.json
+```json
+{"generated": 0, "repo": "LibreHU/LibreHU-flashablesZips",
+ "categories": [{"id": "recovery", "name": "Recovery", "name_fr": "Recovery", "description_fr": "..."}],
+ "zips": [{"id": "twrp-ujc201", "name": "...", "category": "recovery", "description": "...", "warning": "...",
+           "devices": ["ac8257_demo"], "version": "v8", "url": "https://.../twrp-ujc201.zip", "size": 0, "sha256": "...",
+           "image_url": "https://.../twrp-ujc201.img", "image_size": 0, "image_sha256": "...", "partition": "recovery",
+           "restore": "...", "hidden": false, "upstream": "...", "license": "..."}]}
+```
+
+## Origine
+Les scripts audio viennent de `tools/audio/twrp/` du dépôt de l'appareil, qui reste la référence pour leur analyse
+([docs/audio_deep_buffer.md](https://github.com/LibreHU/android_device_alps_ac8257_demo/blob/ccr-eca2d7b0-vz26un/docs/audio_deep_buffer.md)).
+Licences : celles des projets d'origine (TWRP GPL-3.0, ViPERFX_RE GPL-2.0, fichier `LICENSE` inclus dans le zip du
+pilote) ; scripts LibreHU sous la même licence que le dépôt de l'appareil.
