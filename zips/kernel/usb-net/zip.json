@@ -8,5 +8,5 @@
   "restore": "usb-net-restore",
   "upstream": "https://github.com/LibreHU/android_device_alps_ac8257_demo/tree/ccr-eca2d7b0-vz26un/tools/usbnet",
   "license": "GPL-2.0 (pilotes Linux 4.9)",
-  "version": "2"
+  "version": "3"
 }

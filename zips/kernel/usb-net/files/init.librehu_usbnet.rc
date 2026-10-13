@@ -1,23 +1,23 @@
 # LibreHU (zip usb-net): USB network drivers missing from the stock kernel (Linux 4.9.117+), loaded once Android
 # has started. Realtek RTL8152/RTL8153, phone USB tethering (Android RNDIS, iPhone), ASIX are built in already.
 #
-# Crash guard: persist.librehu.usbnet.loading is 1 while they load. If the unit restarts meanwhile, the next boot
-# leaves them out and sets persist.librehu.usbnet.off=1, until re-enabled (LibreHU-service, Ethernet card, or
-# "setprop persist.librehu.usbnet.off 0"). Load now (after re-enabling): setprop sys.librehu.usbnet.arm 1
+# Crash guard: persist.vendor.librehu.usbnet.loading is 1 while they load. If the unit restarts meanwhile, the next boot
+# leaves them out and sets persist.vendor.librehu.usbnet.off=1, until re-enabled (LibreHU-service, Ethernet card, or
+# "setprop persist.vendor.librehu.usbnet.off 0"). Load now (after re-enabling): setprop vendor.librehu.usbnet.arm 1
 on boot
-    setprop sys.librehu.usbnet.arm 1
+    setprop vendor.librehu.usbnet.arm 1
 
-on boot && property:persist.librehu.usbnet.loading=1
-    setprop persist.librehu.usbnet.off 1
-    setprop persist.librehu.usbnet.loading 0
-    setprop sys.librehu.usbnet.arm 0
+on boot && property:persist.vendor.librehu.usbnet.loading=1
+    setprop persist.vendor.librehu.usbnet.off 1
+    setprop persist.vendor.librehu.usbnet.loading 0
+    setprop vendor.librehu.usbnet.arm 0
 
-on boot && property:persist.librehu.usbnet.off=1
-    setprop sys.librehu.usbnet.arm 0
+on boot && property:persist.vendor.librehu.usbnet.off=1
+    setprop vendor.librehu.usbnet.arm 0
 
-on property:sys.boot_completed=1 && property:sys.librehu.usbnet.arm=1
-    setprop sys.librehu.usbnet.arm 2
-    setprop persist.librehu.usbnet.loading 1
+on property:sys.boot_completed=1 && property:vendor.librehu.usbnet.arm=1
+    setprop vendor.librehu.usbnet.arm 2
+    setprop persist.vendor.librehu.usbnet.loading 1
     insmod /vendor/lib/modules/librehu-usbnet/r8152.ko
     insmod /vendor/lib/modules/librehu-usbnet/rndis_host.ko
     insmod /vendor/lib/modules/librehu-usbnet/ipheth.ko
@@ -32,5 +32,5 @@ on property:sys.boot_completed=1 && property:sys.librehu.usbnet.arm=1
     insmod /vendor/lib/modules/librehu-usbnet/rtl8150.ko
     insmod /vendor/lib/modules/librehu-usbnet/pegasus.ko
     insmod /vendor/lib/modules/librehu-usbnet/cdc_eem.ko
-    setprop persist.librehu.usbnet.loading 0
-    setprop sys.librehu.usbnet.loaded 1
+    setprop persist.vendor.librehu.usbnet.loading 0
+    setprop vendor.librehu.usbnet.loaded 1
