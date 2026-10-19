@@ -1,6 +1,6 @@
 # UJC201 - pilotes reseau USB (Ethernet Realtek, partage de connexion USB Android / iPhone, autres puces) (zip TWRP)
 # Modules compiles pour le noyau stock 4.9.117+ (memes exports et CRC pour Jancar #25 et #72), source et
-# verification : tools/usbnet du depot de l'appareil. Copies dans /vendor/lib/modules/librehu-usbnet, charges par
+# verification : tools/ac8257/usbnet du depot du noyau (android_kernel_autochips_ac8257_4.9). Copies dans /vendor/lib/modules/librehu-usbnet, charges par
 # /vendor/etc/init/init.librehu_usbnet.rc une fois Android demarre (comme les modules stock bt_drv, wmt_drv).
 # dm-verity : s'arrete sans rien modifier si /vendor est verifie.
 # Retour : zip usb-net-restore.

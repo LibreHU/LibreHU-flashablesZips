@@ -1,6 +1,6 @@
-# UJC201 - retire la sortie audio "deep_buffer" (zip TWRP), comme tools/audio/no_deep_buffer.sh mais sans adb root
+# UJC201 - retire la sortie audio "deep_buffer" (zip TWRP), comme tools/ac8257/audio/no_deep_buffer.sh (depot du noyau) mais sans adb root
 # Sur cette unite la sortie deep_buffer (PCM 3, MultiMedia2) reste muette : toute la musique passe alors par
-# "primary" (celle des sonneries, qui marche). Voir docs/audio_deep_buffer.md.
+# "primary" (celle des sonneries, qui marche). Voir docs/ujc201/audio_deep_buffer.md du depot du noyau.
 # Fichier : le premier audio_policy_configuration.xml dans l'ordre de recherche d'Android 9.
 # Sauvegarde : <fichier>.nodeep-orig a cote + /sdcard/UJC201_audio_backup/<date>/. Retour : zip no-deep-buffer-restore.
 

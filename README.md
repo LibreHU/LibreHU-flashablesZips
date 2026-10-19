@@ -13,7 +13,7 @@ TWRP, ou écriture directe d'une image en root).
 | `drivers` | `viper4android-re` / `-restore` | pilote **ViPER4Android RE** (`libv4a_re.so` du module officiel [ViPERFX_RE](https://github.com/likelikeslike/ViPERFX_RE) v2.1.1, empreinte vérifiée) dans `/vendor/lib[64]/soundfx` + déclaration dans `audio_effects.xml`, sans Magisk ; et son retrait |
 | `tweaks` | `no-deep-buffer` / `-restore` | sortie audio `deep_buffer` retirée de la politique audio (musique muette, sonneries OK) ; et sa remise |
 | `updates` | — | à venir |
-| `kernel` | `usb-net` / `-restore` | pilotes **réseau USB** absents du noyau stock (4.9.117+, Jancar #25 et #72) : adaptateurs Ethernet **Realtek RTL8152 / RTL8153**, **partage de connexion USB** d'un téléphone Android (RNDIS) et d'un iPhone (expérimental), LAN78xx, LAN95xx / 75xx, DM9601, SR9700 / SR9800, MCS7830, CH9200, RTL8150, Pegasus, CDC EEM ; modules dans `/vendor/lib/modules/librehu-usbnet`, chargés une fois Android démarré avec protection contre les redémarrages (source et vérification des CRC : `tools/usbnet` du dépôt de l'appareil) ; et leur retrait |
+| `kernel` | `usb-net` / `-restore` | pilotes **réseau USB** absents du noyau stock (4.9.117+, Jancar #25 et #72) : adaptateurs Ethernet **Realtek RTL8152 / RTL8153**, **partage de connexion USB** d'un téléphone Android (RNDIS) et d'un iPhone (expérimental), LAN78xx, LAN95xx / 75xx, DM9601, SR9700 / SR9800, MCS7830, CH9200, RTL8150, Pegasus, CDC EEM ; modules dans `/vendor/lib/modules/librehu-usbnet`, chargés une fois Android démarré avec protection contre les redémarrages (source et vérification des CRC : `tools/ac8257/usbnet` du dépôt du noyau) ; et leur retrait |
 
 Les zips qui modifient `/vendor` ou `/system` s'arrêtent **sans rien modifier** si la partition est protégée par
 dm-verity (l'autoradio ne démarrerait plus) : la désactiver d'abord (`fastboot --disable-verity flash vbmeta vbmeta.img`).
@@ -44,7 +44,7 @@ chaque jour, puis publie la release `zips` (les fichiers qui ne sont plus constr
 ```
 
 ## Origine
-Les scripts audio viennent de `tools/audio/twrp/` du dépôt de l'appareil, qui reste la référence pour leur analyse
-([docs/audio_deep_buffer.md](https://github.com/LibreHU/android_device_alps_ac8257_demo/blob/ccr-eca2d7b0-vz26un/docs/audio_deep_buffer.md)).
+Les scripts audio viennent de `tools/ac8257/audio/twrp/` du dépôt du noyau [android_kernel_autochips_ac8257_4.9](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/master/tools/ac8257/audio), qui reste la référence pour leur analyse
+([docs/ujc201/audio_deep_buffer.md](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/master/docs/ujc201/audio_deep_buffer.md)).
 Licences : celles des projets d'origine (TWRP GPL-3.0, ViPERFX_RE GPL-2.0, fichier `LICENSE` inclus dans le zip du
 pilote) ; scripts LibreHU sous la même licence que le dépôt de l'appareil.

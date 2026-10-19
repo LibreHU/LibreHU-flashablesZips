@@ -6,7 +6,7 @@
   "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Uniquement pour le noyau stock Jancar 4.9.117+ (ou la reconstruction LibreHU).",
   "devices": ["ac8257_demo"],
   "restore": "usb-net-restore",
-  "upstream": "https://github.com/LibreHU/android_device_alps_ac8257_demo/tree/ccr-eca2d7b0-vz26un/tools/usbnet",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/master/tools/ac8257/usbnet",
   "license": "GPL-2.0 (pilotes Linux 4.9)",
   "version": "3"
 }
