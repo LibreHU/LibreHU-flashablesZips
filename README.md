@@ -44,7 +44,7 @@ chaque jour, puis publie la release `zips` (les fichiers qui ne sont plus constr
 ```
 
 ## Origine
-Les scripts audio viennent de `tools/ac8257/audio/twrp/` du dépôt du noyau [android_kernel_autochips_ac8257_4.9](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/master/tools/ac8257/audio), qui reste la référence pour leur analyse
-([docs/ujc201/audio_deep_buffer.md](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/master/docs/ujc201/audio_deep_buffer.md)).
+Les scripts audio viennent de `tools/ac8257/audio/twrp/` du dépôt du noyau [android_kernel_autochips_ac8257_4.9](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/reverse-engineering/tools/ac8257/audio), qui reste la référence pour leur analyse
+([docs/ujc201/audio_deep_buffer.md](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/reverse-engineering/docs/ujc201/audio_deep_buffer.md)).
 Licences : celles des projets d'origine (TWRP GPL-3.0, ViPERFX_RE GPL-2.0, fichier `LICENSE` inclus dans le zip du
 pilote) ; scripts LibreHU sous la même licence que le dépôt de l'appareil.
