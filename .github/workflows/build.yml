@@ -4,8 +4,9 @@ on:
   push:
     branches: [main]
   schedule:
-    # Every day: picks up a new TWRP release of the device repository.
-    - cron: "17 4 * * *"
+    # Every hour: picks up a new TWRP release of the device repository or a new kernel build (latest-<branch>
+    # releases of the kernel repository); nothing is published when no zip changed.
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -26,7 +27,27 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python3 tools/build.py
 
+      - name: Changed since the published index?
+        id: changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Zips are reproducible (fixed dates in the archives): same versions and SHA-256 = nothing new.
+          # Pushes and manual runs always publish; the hourly run only when something changed.
+          if [ "${{ github.event_name }}" != schedule ]; then echo "publish=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          gh release download zips -p index.json -O published.json 2>/dev/null || { echo "publish=true" >> "$GITHUB_OUTPUT"; exit 0; }
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          def key(p):
+              d = json.load(open(p))
+              return (d.get("categories"), sorted((z["id"], z.get("version"), z.get("sha256"), z.get("image_sha256"),
+                      json.dumps(z, sort_keys=True)) for z in d["zips"]))
+          print("publish=" + ("false" if key("published.json") == key("dist/index.json") else "true"))
+          PY
+          cat "$GITHUB_OUTPUT"
+
       - name: Publish (release "zips")
+        if: steps.changed.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

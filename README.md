@@ -9,7 +9,7 @@ TWRP, ou écriture directe d'une image en root).
 
 | Catégorie | Zip | Rôle |
 |---|---|---|
-| `recovery` | `twrp-ujc201` | **dernière release TWRP** UJC201 du dépôt [android_device_alps_ac8257_demo](https://github.com/LibreHU/android_device_alps_ac8257_demo/releases) (reprise chaque jour par la CI), vérifiée puis écrite dans la partition recovery, l'actuelle sauvegardée dans `/sdcard/LibreHU/backup` ; l'image seule est publiée aussi (`twrp-ujc201.img`) |
+| `recovery` | `twrp-ujc201` | **dernière release TWRP** UJC201 du dépôt [android_device_alps_ac8257_demo](https://github.com/LibreHU/android_device_alps_ac8257_demo/releases) (reprise toutes les heures par la CI), vérifiée puis écrite dans la partition recovery, l'actuelle sauvegardée dans `/sdcard/LibreHU/backup` ; l'image seule est publiée aussi (`twrp-ujc201.img`) |
 | `drivers` | `viper4android-re` / `-restore` | pilote **ViPER4Android RE** (`libv4a_re.so` du module officiel [ViPERFX_RE](https://github.com/likelikeslike/ViPERFX_RE) v2.1.1, empreinte vérifiée) dans `/vendor/lib[64]/soundfx` + déclaration dans `audio_effects.xml`, sans Magisk ; et son retrait |
 | `tweaks` | `no-deep-buffer` / `-restore` | sortie audio `deep_buffer` retirée de la politique audio (musique muette, sonneries OK) ; et sa remise |
 | `tweaks` | `supersu-remove` / `supersu-restore` | **suppression de SuperSU** (mode système, installé dans la ROM) pour passer au root **KernelSU Next** du noyau LibreHU : défait ce que fait l'installeur de SuperSU (`su`, `daemonsu`, `supolicy`, `libsupol.so`, `bin/.ext/.su`, appli, `install-recovery.sh` et son `_original`, `99SuperSUDaemon`, `app_process32/64_original` remis à la place des liens vers `daemonsu`, `app_process` → `app_process64`) ; tout est sauvegardé d'abord (tar + contextes SELinux) dans `/sdcard/LibreHU/backup/supersu-<date>`, une erreur remet la sauvegarde ; s'arrête si le noyau de boot n'a pas KernelSU. **Installer SuperSU** = remise depuis cette sauvegarde (SuperSU, propriétaire, n'est pas redistribué ici) |
@@ -35,7 +35,7 @@ Un dossier `zips/<catégorie>/<id>/` :
   `tools/kernel_prepare.sh <dossier> <branche> <image>`.
 
 `python3 tools/build.py` construit tout dans `dist/` (zips, images, `index.json`) ; la CI le fait à chaque push et
-chaque jour (nouvelle release TWRP ou nouveau noyau repris ainsi), puis publie la release `zips` (les fichiers qui ne sont plus construits sont retirés).
+toutes les heures (nouvelle release TWRP ou nouveau noyau repris ainsi ; rien n'est republié si aucun zip n'a changé), puis publie la release `zips` (les fichiers qui ne sont plus construits sont retirés).
 
 ## index.json
 ```json
