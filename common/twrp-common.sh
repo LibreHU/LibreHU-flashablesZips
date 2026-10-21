@@ -92,3 +92,34 @@ require_no_verity() {
 
 # Partition d'un fichier : vendor ou system
 part_of() { case "$1" in $VENMNT/*) echo vendor;; *) echo system;; esac; }
+
+# --- Image de partition du zip (files/<image> + files/<image>.sha256) : $1 = image, $2 = partition (boot...)
+# Verifie l'empreinte et la taille, sauvegarde la partition actuelle dans $SDCARD/LibreHU/backup, ecrit, relit.
+flash_image() {
+	_img=$1; _pn=$2; _part=""
+	for _p in /dev/block/by-name/$_pn /dev/block/platform/*/by-name/$_pn /dev/block/platform/*/*/by-name/$_pn; do
+		[ -e "$_p" ] && { _part=$_p; break; }
+	done
+	[ -n "$_part" ] || abort "partition $_pn introuvable"
+	_t=${UJC_TMP:-/tmp}/librehu_img_$_pn; rm -rf $_t; mkdir -p $_t
+	unzip -o -q "$ZIPFILE" "files/$_img" "files/$_img.sha256" -d $_t || abort "extraction du zip impossible"
+	_e=$(cut -d' ' -f1 $_t/files/$_img.sha256)
+	[ "$(sha256sum $_t/files/$_img | cut -d' ' -f1)" = "$_e" ] || abort "image abimee (empreinte)"
+	_isz=$(stat -c %s $_t/files/$_img)
+	_psz=$(blockdev --getsize64 "$_part" 2>/dev/null)
+	[ -n "$_psz" ] && [ "$_isz" -le "$_psz" ] || abort "image ($_isz octets) plus grande que la partition ($_psz)"
+	if [ -d $SDCARD ]; then
+		mkdir -p $SDCARD/LibreHU/backup
+		_b=$SDCARD/LibreHU/backup/$_pn-$(date +%Y%m%d-%H%M%S).img
+		dd if="$_part" of="$_b" bs=1048576 2>/dev/null || abort "sauvegarde de $_pn impossible (memoire pleine ?)"
+		ui_print "Sauvegarde : $_b"
+	else
+		ui_print "Memoire interne non montee : pas de sauvegarde de $_pn"
+	fi
+	blockdev --setrw "$_part" 2>/dev/null
+	dd if=$_t/files/$_img of="$_part" bs=1048576 2>/dev/null || abort "ecriture de $_part impossible"
+	sync
+	[ "$(head -c $_isz "$_part" | sha256sum | cut -d' ' -f1)" = "$_e" ] || abort "verification apres ecriture echouee : reflasher la sauvegarde"
+	rm -rf $_t
+	ui_print "$_img ecrit dans $_part"
+}

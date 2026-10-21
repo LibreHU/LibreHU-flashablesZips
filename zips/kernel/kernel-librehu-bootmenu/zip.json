@@ -1,0 +1,14 @@
+{
+  "id": "kernel-librehu-bootmenu",
+  "name": "Noyau LibreHU + menu de démarrage (LibreHU-main)",
+  "category": "kernel",
+  "description": "Le même noyau LibreHU (branche LibreHU-main). Avec le menu de démarrage de l'arbre device à chaque allumage : TWRP / Android / Fastboot, Android au bout de 3 s (toucher l'écran met en pause).",
+  "warning": "Remplace le noyau de la partition boot (bootloader déverrouillé nécessaire : fastboot flash doit marcher ; vbmeta n'est pas modifié). Le zip sauvegarde d'abord le boot actuel dans /sdcard/LibreHU/backup (boot-<date>.img) ; retour arrière : dans TWRP, Install › Install Image › Boot avec cette sauvegarde, ou fastboot flash boot boot-<date>.img. Menu de démarrage pas encore testé sur l'unité avec ce noyau.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "image": "files/boot.img",
+  "partition": "boot",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/releases/tag/latest-LibreHU-main",
+  "license": "GPL-2.0 (Linux)"
+}

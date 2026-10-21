@@ -1,0 +1,14 @@
+{
+  "id": "kernel-connectivity",
+  "name": "Noyau LibreHU, connectivité intégrée (expérimental)",
+  "category": "kernel",
+  "description": "Branche connectivity-builtin : le noyau LibreHU avec le Wi-Fi, le Bluetooth, le GPS et la radio FM compilés dans le noyau (pilotes GPL MediaTek adaptés à l'AC8257) au lieu des modules de /vendor.",
+  "warning": "Remplace le noyau de la partition boot (bootloader déverrouillé nécessaire : fastboot flash doit marcher ; vbmeta n'est pas modifié). Le zip sauvegarde d'abord le boot actuel dans /sdcard/LibreHU/backup (boot-<date>.img) ; retour arrière : dans TWRP, Install › Install Image › Boot avec cette sauvegarde, ou fastboot flash boot boot-<date>.img. Expérimental : branche pas encore testée sur l'unité.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "image": "files/boot.img",
+  "partition": "boot",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/releases/tag/latest-connectivity-builtin",
+  "license": "GPL-2.0 (Linux)"
+}

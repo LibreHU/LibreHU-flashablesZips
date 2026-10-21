@@ -1,0 +1,14 @@
+{
+  "id": "kernel-librehu",
+  "name": "Noyau LibreHU (branche LibreHU-main)",
+  "category": "kernel",
+  "description": "Noyau 4.9.117 compilé depuis les sources GPL Autochips envoyées par Jancar, avec les ajouts LibreHU : tactile GT928 calibré, KernelSU, Ethernet USB intégré, pilotes de lecteurs CD / DVD USB, fréquences et tensions CPU / GPU réglables. Dernier build de la branche (branche testée sur l'unité ; état détaillé : README du dépôt du noyau).",
+  "warning": "Remplace le noyau de la partition boot (bootloader déverrouillé nécessaire : fastboot flash doit marcher ; vbmeta n'est pas modifié). Le zip sauvegarde d'abord le boot actuel dans /sdcard/LibreHU/backup (boot-<date>.img) ; retour arrière : dans TWRP, Install › Install Image › Boot avec cette sauvegarde, ou fastboot flash boot boot-<date>.img.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "image": "files/boot.img",
+  "partition": "boot",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/releases/tag/latest-LibreHU-main",
+  "license": "GPL-2.0 (Linux)"
+}

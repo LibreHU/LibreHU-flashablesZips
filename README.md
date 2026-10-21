@@ -13,6 +13,8 @@ TWRP, ou écriture directe d'une image en root).
 | `drivers` | `viper4android-re` / `-restore` | pilote **ViPER4Android RE** (`libv4a_re.so` du module officiel [ViPERFX_RE](https://github.com/likelikeslike/ViPERFX_RE) v2.1.1, empreinte vérifiée) dans `/vendor/lib[64]/soundfx` + déclaration dans `audio_effects.xml`, sans Magisk ; et son retrait |
 | `tweaks` | `no-deep-buffer` / `-restore` | sortie audio `deep_buffer` retirée de la politique audio (musique muette, sonneries OK) ; et sa remise |
 | `updates` | — | à venir |
+| `kernel` | `kernel-librehu` / `kernel-librehu-bootmenu` | **noyau LibreHU** (branche `LibreHU-main` du [dépôt du noyau](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9)) : image `boot_ac8257.img` de sa release `latest-LibreHU-main` (refaite par sa CI à chaque build, version `r<build>-<commit>`), seule ou avec le **menu de démarrage** TWRP / Android / Fastboot (`boot_ac8257_bootmenu.img`) ; vérifiée (empreinte, en-tête `ANDROID!`, pied AVB, 10 Mio au plus), écrite dans la partition **boot**, l'actuelle sauvegardée dans `/sdcard/LibreHU/backup` ; vbmeta n'est pas touché ; l'image seule est publiée aussi (`<id>.img`) |
+| `kernel` | `kernel-connectivity` / `kernel-connectivity-bootmenu` | même chose pour la branche **`connectivity-builtin`** (Wi-Fi, Bluetooth, GPS, FM intégrés au noyau), release `latest-connectivity-builtin` : **expérimental**, pas encore testée sur l'unité |
 | `kernel` | `usb-net` / `-restore` | pilotes **réseau USB** absents du noyau stock (4.9.117+, Jancar #25 et #72) : adaptateurs Ethernet **Realtek RTL8152 / RTL8153**, **partage de connexion USB** d'un téléphone Android (RNDIS) et d'un iPhone (expérimental), LAN78xx, LAN95xx / 75xx, DM9601, SR9700 / SR9800, MCS7830, CH9200, RTL8150, Pegasus, CDC EEM ; modules dans `/vendor/lib/modules/librehu-usbnet`, chargés une fois Android démarré avec protection contre les redémarrages (source et vérification des CRC : `tools/ac8257/usbnet` du dépôt du noyau) ; et leur retrait |
 
 Les zips qui modifient `/vendor` ou `/system` s'arrêtent **sans rien modifier** si la partition est protégée par
@@ -26,12 +28,13 @@ Un dossier `zips/<catégorie>/<id>/` :
   restauration, montré seulement depuis l'autre), `version` (ou écrite par `prepare.sh`), `image` + `partition`
   (image aussi publiée seule, que l'appli peut écrire directement), `upstream`, `license` ;
 - `install.sh` : corps de `update-binary`, après [common/twrp-common.sh](common/twrp-common.sh) (`ui_print`, `abort`,
-  `mount_rw`, `require_no_verity`, `$SDCARD`…) et la vérification de l'appareil ; variables `$ZIPFILE`, `$VERSION` ;
+  `mount_rw`, `require_no_verity`, `flash_image <image> <partition>`, `$SDCARD`…) et la vérification de l'appareil ; variables `$ZIPFILE`, `$VERSION` ;
 - facultatif : `files/` (mis dans le zip sous `files/`) et `prepare.sh <dossier>` (remplit `<dossier>/files` et
-  `<dossier>/version` avant l'empaquetage : téléchargement d'une release, avec vérification d'empreinte).
+  `<dossier>/version` avant l'empaquetage : téléchargement d'une release, avec vérification d'empreinte). Les zips de noyau appellent
+  `tools/kernel_prepare.sh <dossier> <branche> <image>`.
 
 `python3 tools/build.py` construit tout dans `dist/` (zips, images, `index.json`) ; la CI le fait à chaque push et
-chaque jour, puis publie la release `zips` (les fichiers qui ne sont plus construits sont retirés).
+chaque jour (nouvelle release TWRP ou nouveau noyau repris ainsi), puis publie la release `zips` (les fichiers qui ne sont plus construits sont retirés).
 
 ## index.json
 ```json
