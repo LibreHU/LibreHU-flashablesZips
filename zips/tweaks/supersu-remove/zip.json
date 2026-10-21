@@ -1,0 +1,12 @@
+{
+  "id": "supersu-remove",
+  "name": "Supprimer SuperSU (root par KernelSU Next)",
+  "category": "tweaks",
+  "description": "Retire SuperSU (mode système) de la ROM : su, daemonsu, supolicy, appli SuperSU, install-recovery.sh et 99SuperSUDaemon, et remet les app_process d'origine que SuperSU avait remplacés par un lien vers daemonsu. Le root passe ensuite par KernelSU Next, intégré au noyau LibreHU (appli KernelSU Next dans LibreHU Apps : y autoriser les applis LibreHU dans Superuser). Tout est sauvegardé d'abord dans /sdcard/LibreHU/backup/supersu-<date> ; une erreur pendant la suppression remet la sauvegarde.",
+  "warning": "dm-verity doit être désactivé sur /system (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Le zip s'arrête aussi si le noyau de la partition boot n'a pas KernelSU (noyau stock : il n'y aurait plus de root). Retour : zip « Installer SuperSU (sauvegarde) ».",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "supersu-restore",
+  "version": "1"
+}

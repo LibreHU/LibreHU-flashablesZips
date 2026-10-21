@@ -1,0 +1,11 @@
+{
+  "id": "supersu-restore",
+  "name": "Installer SuperSU (sauvegarde)",
+  "category": "tweaks",
+  "description": "Remet SuperSU tel qu'il était dans la ROM, depuis la sauvegarde la plus récente du zip « Supprimer SuperSU » (/sdcard/LibreHU/backup/supersu-<date>) : fichiers de /system, contextes SELinux, mise à jour de l'appli. SuperSU n'est pas inclus dans ce zip (logiciel propriétaire de Chainfire, non redistribué ici) : sans sauvegarde, flasher soi-même le zip officiel SuperSU 2.82 SR5.",
+  "warning": "dm-verity doit être désactivé sur /system (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Avec KernelSU Next en plus, les deux gestionnaires root coexistent ; SuperSU répond aux demandes faites par son su.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "version": "1"
+}
