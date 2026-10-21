@@ -1,5 +1,5 @@
 #!/bin/sh
-# Télécharge l'image TWRP de la dernière release twrp-build-* (non brouillon) du dépôt de l'appareil.
+# Télécharge l'image TWRP de la dernière release twrp-build-* (ni brouillon ni pré-release) du dépôt de l'appareil.
 # $1 = dossier de travail : files/twrp.img (+ .sha256) et version y sont écrits. GH_TOKEN pour l'API (CI).
 set -e
 W=$1
@@ -9,7 +9,10 @@ gh api "repos/$REPO/releases?per_page=30" > "$W/releases.json"
 python3 - "$W" <<'PY'
 import json, sys, re
 w = sys.argv[1]
-rels = [r for r in json.load(open(f"{w}/releases.json")) if r["tag_name"].startswith("twrp-build-") and not r["draft"]]
+# pre-releases skipped: every CI build of the device repository is one (test builds); only a build marked as a
+# release (by hand, once tested on the unit) reaches LibreHU Apps
+rels = [r for r in json.load(open(f"{w}/releases.json"))
+        if r["tag_name"].startswith("twrp-build-") and not r["draft"] and not r["prerelease"]]
 rels.sort(key=lambda r: int(re.sub(r"\D", "", r["tag_name"]) or 0), reverse=True)
 for r in rels:
     imgs = [a for a in r["assets"] if re.match(r"(?i)^twrp.*\.img$", a["name"])]
