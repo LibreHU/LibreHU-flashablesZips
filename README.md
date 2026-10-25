@@ -53,3 +53,12 @@ Les scripts audio viennent de `tools/ac8257/audio/twrp/` du dépôt du noyau [an
 ([docs/ujc201/audio_deep_buffer.md](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/reverse-engineering/docs/ujc201/audio_deep_buffer.md)).
 Licences : celles des projets d'origine (TWRP GPL-3.0, ViPERFX_RE GPL-2.0, fichier `LICENSE` inclus dans le zip du
 pilote) ; scripts LibreHU sous la même licence que le dépôt de l'appareil.
+
+## Soutenir le projet
+
+LibreHU est développé bénévolement, sur le temps libre, et toutes ses applis restent gratuites. Si le projet vous est
+utile, vous pouvez le soutenir par un don sur [Liberapay](https://liberapay.com/DokT/donate) (association française à
+but non lucratif, dons récurrents) :
+
+[![Faire un don avec Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/DokT/donate)
+[![Donateurs sur Liberapay](https://img.shields.io/liberapay/patrons/DokT.svg?logo=liberapay)](https://liberapay.com/DokT/)
