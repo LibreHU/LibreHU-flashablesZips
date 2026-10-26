@@ -1,0 +1,12 @@
+{
+  "id": "conn-modules-stable-restore",
+  "name": "Remettre les modules Wi-Fi / BT / GPS / FM d'origine",
+  "category": "kernel",
+  "description": "Remet dans /vendor/lib/modules les six modules de connectivité d'origine sauvegardés par le zip conn-modules-stable (/sdcard/LibreHU/backup/conn-modules-orig, empreintes vérifiées), avec leurs droits et leur contexte SELinux. À flasher avant de revenir au noyau LibreHU-main ou au noyau stock.",
+  "warning": "dm-verity doit être désactivé sur /vendor (il l'est déjà si conn-modules-stable a été installé).",
+  "devices": ["ac8257_demo"],
+  "hidden": true,
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/stable-4.9.150/docs/STABLE.md",
+  "license": "GPL-2.0",
+  "version": "1"
+}
