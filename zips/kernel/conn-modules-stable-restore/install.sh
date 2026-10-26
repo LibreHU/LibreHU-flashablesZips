@@ -1,4 +1,6 @@
-# UJC201 - remet les modules Wi-Fi / BT / GPS / FM d'origine sauvegardes par le zip conn-modules-stable (zip TWRP)
+# UJC201 - remet les modules Wi-Fi / BT / GPS / FM d'origine (noyau 4.9.117 : GPL LibreHU-main ou stock), sauvegardes
+# sur l'autoradio par les zips kernel-stable-4.9.* / conn-modules-stable-4.9.* avant toute modification (zip TWRP).
+# Les modules stock ne sont pas dans le zip : rien de /vendor n'est publie.
 # Source : $SDCARD/LibreHU/backup/conn-modules-orig (empreintes verifiees), droits, proprietaire et contexte SELinux
 # d'origine. Un module absent a l'origine est retire. A flasher avant de revenir a LibreHU-main ou au noyau stock.
 
@@ -8,13 +10,19 @@ ui_print "UJC201 - modules Wi-Fi / BT / GPS / FM d'origine"
 ui_print "-----------------------------------------------"
 [ -d $SDCARD ] || abort "memoire interne non montee"
 SRC=$SDCARD/LibreHU/backup/conn-modules-orig
+mount_rw
+if [ ! -f $VENMNT/lib/modules/.librehu_conn ] && [ ! -f $SRC/meta.txt ]; then
+	ui_print "Les modules de /vendor n'ont jamais ete remplaces par LibreHU :"
+	ui_print "ce sont deja ceux d'origine, rien a faire."
+	cleanup
+	exit 0
+fi
 [ -f $SRC/meta.txt ] || abort "pas de sauvegarde d'origine ($SRC) : rien n'a ete modifie"
 while read -r SUM NAME; do
 	[ "$(sha256sum $SRC/$NAME | cut -d' ' -f1)" = "$SUM" ] || abort "sauvegarde abimee : $NAME (rien n'a ete modifie)"
 done < $SRC/SHA256SUMS
 ui_print "sauvegarde : $SRC"
 
-mount_rw
 require_no_verity vendor
 MD=$VENMNT/lib/modules
 for m in $MODS; do

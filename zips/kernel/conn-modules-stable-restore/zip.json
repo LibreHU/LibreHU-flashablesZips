@@ -1,12 +1,13 @@
 {
   "id": "conn-modules-stable-restore",
-  "name": "Remettre les modules Wi-Fi / BT / GPS / FM d'origine",
+  "name": "Modules Wi-Fi / BT / GPS / FM d'origine (retour au noyau 4.9.117 GPL ou stock)",
   "category": "kernel",
-  "description": "Remet dans /vendor/lib/modules les six modules de connectivité d'origine sauvegardés par les zips kernel-stable-4.9.* et conn-modules-stable-4.9.* (/sdcard/LibreHU/backup/conn-modules-orig, empreintes vérifiées), avec leurs droits et leur contexte SELinux. À flasher avant de revenir au noyau LibreHU-main ou au noyau stock.",
-  "warning": "dm-verity doit être désactivé sur /vendor (il l'est déjà si un de ces zips a été installé).",
-  "devices": ["ac8257_demo"],
-  "hidden": true,
-  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/stable-4.9.150/docs/STABLE.md",
+  "description": "Pour revenir au noyau 4.9.117 (GPL : zip kernel-librehu, ou stock : votre sauvegarde boot-<date>.img) après un noyau linux-stable : remet dans /vendor/lib/modules les six modules de connectivité d'origine (wmt_drv, wmt_chrdev_wifi, wlan_drv_gen4m, bt_drv, gps_drv, fmradio_drv), avec leurs droits et leur contexte SELinux. Ils viennent de la sauvegarde faite sur l'autoradio par les zips kernel-stable-4.9.* et conn-modules-stable-4.9.* avant toute modification (/sdcard/LibreHU/backup/conn-modules-orig, empreintes vérifiées) : les fichiers stock ne sont pas publiés. Si les modules n'ont jamais été remplacés, le zip le dit et ne fait rien.",
+  "warning": "Avec les modules d'origine, le Wi-Fi, le Bluetooth, le GPS et la FM ne marchent qu'avec un noyau 4.9.117 (LibreHU-main ou stock) : flasher ce noyau juste après, avant de redémarrer. dm-verity doit être désactivé sur /vendor (il l'est déjà si un zip linux-stable a été installé).",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/stable-4.9.337/docs/STABLE.md",
   "license": "GPL-2.0",
-  "version": "1"
+  "version": "2"
 }
