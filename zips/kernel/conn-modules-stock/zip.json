@@ -1,0 +1,16 @@
+{
+  "id": "conn-modules-stock-4.9.117",
+  "name": "Modules Wi-Fi / BT / GPS / FM d'origine (stock 4.9.117)",
+  "category": "kernel",
+  "description": "Les six modules de connectivité du vendor d'origine de l'UJC201 (wmt_drv, wmt_chrdev_wifi, wlan_drv_gen4m, bt_drv, gps_drv, fmradio_drv ; licences GPL / Dual BSD-GPL), pour revenir au noyau 4.9.117 (GPL LibreHU-main ou stock) après un noyau linux-stable, même sans sauvegarde sur l'autoradio. Remet aussi droits et contexte SELinux ; les modules actuels sont sauvegardés avant dans /sdcard/LibreHU/backup/conn-modules-<date>.",
+  "warning": "Ces modules ne marchent qu'avec un noyau 4.9.117 (LibreHU-main ou stock) : le flasher aussi avant de redémarrer. dm-verity doit être désactivé sur /vendor.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "include": [
+    "common/conn-modules.sh"
+  ],
+  "license": "GPL-2.0 / Dual BSD-GPL (pilotes MediaTek)",
+  "version": "4.9.117-stock",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/autochips-gpl"
+}
