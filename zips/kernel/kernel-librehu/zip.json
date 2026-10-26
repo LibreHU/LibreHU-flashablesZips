@@ -10,5 +10,11 @@
   "image": "files/boot.img",
   "partition": "boot",
   "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/releases/tag/latest-LibreHU-main",
-  "license": "GPL-2.0 (Linux)"
+  "license": "GPL-2.0 (Linux)",
+  "subcategory": "main",
+  "group": "kernel-librehu",
+  "group_name": "Noyau LibreHU (LibreHU-main, 4.9.117)",
+  "group_description": "Noyau 4.9.117 compilé depuis les sources GPL Autochips de Jancar, avec les ajouts LibreHU (tactile, KernelSU Next, Ethernet USB, lecteurs CD / DVD, fréquences et tensions réglables). Utilise les modules Wi-Fi / BT / GPS / FM d'origine. Testé sur l'unité.",
+  "variant": "Sans menu de démarrage",
+  "order": 100
 }

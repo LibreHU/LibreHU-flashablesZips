@@ -3,7 +3,11 @@
   "name": "Sortie audio deep_buffer remise",
   "category": "tweaks",
   "description": "Remet le fichier audio_policy_configuration.xml d'origine sauvegardé par le zip no-deep-buffer.",
-  "devices": ["ac8257_demo"],
+  "devices": [
+    "ac8257_demo"
+  ],
   "hidden": true,
-  "version": "1"
+  "version": "1",
+  "subcategory": "audio",
+  "order": 101
 }

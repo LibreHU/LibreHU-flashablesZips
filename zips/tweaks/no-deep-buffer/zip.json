@@ -4,7 +4,11 @@
   "category": "tweaks",
   "description": "Retire la sortie deep_buffer de /vendor/etc/audio_policy_configuration.xml : la musique passe par la sortie primary, qui s'entend (contournement du silence de la musique, sonneries OK). Fichier d'origine sauvegardé.",
   "warning": "dm-verity doit être désactivé sur /vendor : le zip s'arrête sinon, sans rien modifier.",
-  "devices": ["ac8257_demo"],
+  "devices": [
+    "ac8257_demo"
+  ],
   "restore": "no-deep-buffer-restore",
-  "version": "1"
+  "version": "1",
+  "subcategory": "audio",
+  "order": 100
 }

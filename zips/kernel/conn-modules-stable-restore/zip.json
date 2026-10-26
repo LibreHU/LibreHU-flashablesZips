@@ -9,5 +9,11 @@
   ],
   "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/stable-4.9.337/docs/STABLE.md",
   "license": "GPL-2.0",
-  "version": "2"
+  "version": "2",
+  "subcategory": "back",
+  "group": "back-4.9.117",
+  "group_name": "Retour au noyau 4.9.117 (GPL ou stock)",
+  "group_description": "Remet les modules Wi-Fi / BT / GPS / FM d'origine après un noyau linux-stable. Flasher ensuite le noyau 4.9.117 (LibreHU-main ou votre sauvegarde du boot stock) avant de redémarrer.",
+  "variant": "Depuis la sauvegarde faite sur l'autoradio",
+  "order": 300
 }

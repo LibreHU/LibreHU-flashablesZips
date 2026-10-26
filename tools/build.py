@@ -6,6 +6,9 @@ in "include"), optional files/ (copied into the zip) and prepare.sh <workdir> (f
 <workdir>/version before packaging).
 "variants" (list of objects) builds one zip per entry from the same item: "{key}" in the string fields of zip.json is
 replaced by the value of the entry, and prepare.sh gets the entry in the environment as ZIP_<KEY>.
+Sorting for LibreHU Apps: "subcategory" (one of its category in categories.json), "group" (zips shown on one card, with
+"group_name" / "group_description", each zip a "variant" of it), "order" (number, smaller first). "screenshots": PNG / JPEG
+paths, relative to the item or to the repository root, published next to the zips (shot-<name>).
 """
 import hashlib
 import json
@@ -22,7 +25,8 @@ BUILD = os.path.join(ROOT, "build")
 REPO = os.environ.get("GITHUB_REPOSITORY", "LibreHU/LibreHU-flashablesZips")
 TAG = os.environ.get("ZIPS_TAG", "zips")
 BASE = f"https://github.com/{REPO}/releases/download/{TAG}/"
-FIELDS = ("id", "name", "category", "description", "warning", "devices", "restore", "hidden", "partition", "upstream", "license")
+FIELDS = ("id", "name", "category", "description", "warning", "devices", "restore", "hidden", "partition", "upstream", "license",
+          "subcategory", "group", "group_name", "group_description", "variant", "order")
 
 
 def sha256(path):
@@ -104,6 +108,21 @@ def build(item_dir, meta, var):
         if os.listdir(os.path.join(work, "files")):
             add_tree(z, os.path.join(work, "files"), "files")
     entry = {k: meta[k] for k in FIELDS if k in meta}
+    if "order" in entry:
+        entry["order"] = int(entry["order"])
+    shots = []
+    for rel in meta.get("screenshots", []):
+        src = os.path.join(item_dir, rel)
+        if not os.path.exists(src):
+            src = os.path.join(ROOT, rel)
+        name = "shot-" + os.path.basename(rel)
+        if not os.path.exists(os.path.join(DIST, name)):
+            shutil.copy(src, os.path.join(DIST, name))
+        elif sha256(src) != sha256(os.path.join(DIST, name)):
+            raise ValueError(f"two different screenshots named {name}")
+        shots.append(BASE + name)
+    if shots:
+        entry["screenshots"] = shots
     entry.update(version=version, url=BASE + f"{zid}.zip", size=os.path.getsize(out), sha256=sha256(out))
     if meta.get("image"):
         img = os.path.join(DIST, f"{zid}.img")

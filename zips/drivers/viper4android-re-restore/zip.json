@@ -3,7 +3,11 @@
   "name": "ViPER4Android RE : retrait du pilote",
   "category": "drivers",
   "description": "Remet les audio_effects d'origine (sauvegardés par le zip d'installation) et supprime libv4a_re.so.",
-  "devices": ["ac8257_demo"],
+  "devices": [
+    "ac8257_demo"
+  ],
   "hidden": true,
-  "version": "1"
+  "version": "1",
+  "subcategory": "audio",
+  "order": 101
 }

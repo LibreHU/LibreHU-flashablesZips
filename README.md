@@ -32,6 +32,11 @@ Un dossier `zips/<catégorie>/<id>/` :
   (image aussi publiée seule, que l'appli peut écrire directement), `upstream`, `license`, `include` (fichiers de
   `common/` ajoutés à `update-binary`, ex. `common/conn-modules.sh`), `variants` (un zip par entrée : `{clé}` remplacé
   dans les textes de `zip.json`, entrée passée à `prepare.sh` en `ZIP_<CLÉ>`) ;
+  pour le tri dans LibreHU Apps : `subcategory` (une des `subcategories` de sa catégorie dans `categories.json`,
+  affichées dans cet ordre), `group` (zips montrés sur une seule carte, avec `group_name` / `group_description` ; chaque
+  zip y est une `variant`, ex. sans / avec menu de démarrage), `order` (nombre, le plus petit d'abord), `screenshots`
+  (images PNG / JPEG, chemin relatif au zip ou au dépôt, ex. `common/screenshots/bootmenu.png`, publiées à côté des zips
+  sous `shot-<nom>`) ;
 - `install.sh` : corps de `update-binary`, après [common/twrp-common.sh](common/twrp-common.sh) (`ui_print`, `abort`,
   `mount_rw`, `require_no_verity`, `flash_image <image> <partition>`, `$SDCARD`…) et la vérification de l'appareil ; variables `$ZIPFILE`, `$VERSION` ;
 - facultatif : `files/` (mis dans le zip sous `files/`) et `prepare.sh <dossier>` (remplit `<dossier>/files` et

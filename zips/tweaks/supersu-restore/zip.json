@@ -7,5 +7,10 @@
   "devices": [
     "ac8257_demo"
   ],
-  "version": "1"
+  "version": "1",
+  "subcategory": "root",
+  "group": "supersu",
+  "group_name": "SuperSU",
+  "variant": "Réinstaller SuperSU (sauvegarde)",
+  "order": 201
 }

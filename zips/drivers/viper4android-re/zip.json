@@ -10,5 +10,7 @@
   "restore": "viper4android-re-restore",
   "upstream": "https://github.com/likelikeslike/ViPERFX_RE",
   "license": "GPL-2.0 (pilote ViPERFX_RE)",
-  "version_from": "prepare"
+  "version_from": "prepare",
+  "subcategory": "audio",
+  "order": 100
 }

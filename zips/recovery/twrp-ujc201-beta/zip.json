@@ -4,10 +4,17 @@
   "category": "recovery",
   "description": "Dernière build de test de la CI du dépôt android_device_alps_ac8257_demo, pré-releases comprises : TWRP entier aux touches au volant (keynav), touches des boîtiers CAN Hiworld (Clio 3…) en plus du volant câblé, version affichée au démarrage de TWRP. Même installation que le zip stable : appareil, taille et empreinte vérifiés, recovery actuel sauvegardé dans /sdcard/LibreHU/backup, écriture puis relecture de la partition recovery.",
   "warning": "Build de test, pas encore validée sur l'unité. Remplace le recovery. Retour arrière : flasher la sauvegarde (recovery-<date>.img) avec fastboot flash recovery, ou le zip TWRP stable.",
-  "devices": ["ac8257_demo"],
+  "devices": [
+    "ac8257_demo"
+  ],
   "image": "files/twrp.img",
   "partition": "recovery",
   "upstream": "https://github.com/LibreHU/android_device_alps_ac8257_demo/releases",
   "license": "GPL-3.0 (TWRP)",
-  "version_from": "prepare"
+  "version_from": "prepare",
+  "subcategory": "twrp",
+  "group": "twrp",
+  "group_name": "TWRP UJC201",
+  "variant": "Bêta (touches au volant)",
+  "order": 101
 }

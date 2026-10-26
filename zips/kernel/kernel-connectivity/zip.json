@@ -10,5 +10,11 @@
   "image": "files/boot.img",
   "partition": "boot",
   "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/releases/tag/latest-connectivity-builtin",
-  "license": "GPL-2.0 (Linux)"
+  "license": "GPL-2.0 (Linux)",
+  "subcategory": "main",
+  "group": "kernel-connectivity",
+  "group_name": "Noyau LibreHU, connectivité intégrée (expérimental)",
+  "group_description": "Variante de LibreHU-main avec le Wi-Fi, le Bluetooth, le GPS et la FM intégrés au noyau (branche connectivity-builtin). Expérimental : pas encore testé sur l'unité.",
+  "variant": "Sans menu de démarrage",
+  "order": 110
 }

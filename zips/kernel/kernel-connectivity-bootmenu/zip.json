@@ -10,5 +10,14 @@
   "image": "files/boot.img",
   "partition": "boot",
   "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/releases/tag/latest-connectivity-builtin",
-  "license": "GPL-2.0 (Linux)"
+  "license": "GPL-2.0 (Linux)",
+  "subcategory": "main",
+  "group": "kernel-connectivity",
+  "group_name": "Noyau LibreHU, connectivité intégrée (expérimental)",
+  "variant": "Avec menu de démarrage (TWRP / Android / Fastboot)",
+  "order": 111,
+  "screenshots": [
+    "common/screenshots/bootmenu.png",
+    "common/screenshots/bootmenu_twrp.png"
+  ]
 }

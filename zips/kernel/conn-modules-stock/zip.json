@@ -12,5 +12,10 @@
   ],
   "license": "GPL-2.0 / Dual BSD-GPL (pilotes MediaTek)",
   "version": "4.9.117-stock",
-  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/autochips-gpl"
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/autochips-gpl",
+  "subcategory": "back",
+  "group": "back-4.9.117",
+  "group_name": "Retour au noyau 4.9.117 (GPL ou stock)",
+  "variant": "Modules stock (même sans sauvegarde)",
+  "order": 301
 }

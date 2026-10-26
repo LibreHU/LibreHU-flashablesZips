@@ -13,41 +13,61 @@
   "restore": "conn-modules-stable-restore",
   "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/{branch}/docs/STABLE.md",
   "license": "GPL-2.0 (pilotes MediaTek publiés par Samsung)",
+  "subcategory": "stable",
+  "group": "linux-stable-{kver}",
+  "group_name": "Noyau linux-stable {kver}",
+  "group_description": "LibreHU-main avec les correctifs officiels linux-stable jusqu'à {kver} et KernelSU Next ; ses modules Wi-Fi / BT / GPS / FM sont recompilés avec lui (ceux du stock sont refusés). État : {status}.",
+  "variant": "Modules seuls (noyau déjà flashé)",
+  "order": "{order_m}",
   "variants": [
     {
       "branch": "stable-4.9.150",
       "kver": "4.9.150",
-      "status": "validé sur l'unité (démarrage, Wi-Fi, partage de connexion, Bluetooth, FM)"
+      "status": "validé sur l'unité (démarrage, Wi-Fi, partage de connexion, Bluetooth, FM)",
+      "order_k": "1700",
+      "order_m": "1701"
     },
     {
       "branch": "stable-4.9.200",
       "kver": "4.9.200",
-      "status": "démarre sur l'unité, modules chargés ; le reste est à tester"
+      "status": "démarre sur l'unité, modules chargés ; le reste est à tester",
+      "order_k": "1600",
+      "order_m": "1601"
     },
     {
       "branch": "stable-4.9.225",
       "kver": "4.9.225",
-      "status": "pas encore testé sur l'unité"
+      "status": "pas encore testé sur l'unité",
+      "order_k": "1550",
+      "order_m": "1551"
     },
     {
       "branch": "stable-4.9.250",
       "kver": "4.9.250",
-      "status": "pas encore testé sur l'unité"
+      "status": "pas encore testé sur l'unité",
+      "order_k": "1500",
+      "order_m": "1501"
     },
     {
       "branch": "stable-4.9.300",
       "kver": "4.9.300",
-      "status": "pas encore testé sur l'unité"
+      "status": "pas encore testé sur l'unité",
+      "order_k": "1400",
+      "order_m": "1401"
     },
     {
       "branch": "stable-4.9.319",
       "kver": "4.9.319",
-      "status": "pas encore testé sur l'unité"
+      "status": "pas encore testé sur l'unité",
+      "order_k": "1362",
+      "order_m": "1363"
     },
     {
       "branch": "stable-4.9.337",
       "kver": "4.9.337",
-      "status": "pas encore testé sur l'unité (dernière version 4.9)"
+      "status": "pas encore testé sur l'unité (dernière version 4.9)",
+      "order_k": "1326",
+      "order_m": "1327"
     }
   ]
 }

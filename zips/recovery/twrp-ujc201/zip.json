@@ -4,10 +4,18 @@
   "category": "recovery",
   "description": "Dernière release TWRP pour l'UJC201 (AC8257) du dépôt android_device_alps_ac8257_demo, image post-traitée (écran, signature AVB du recovery stock). Le zip vérifie l'appareil, la taille et l'empreinte, sauvegarde le recovery actuel dans /sdcard/LibreHU/backup puis écrit la partition recovery. Depuis Android (root), LibreHU Apps peut aussi écrire l'image directement, sans passer par TWRP.",
   "warning": "Remplace le recovery. Retour arrière : flasher la sauvegarde (recovery-<date>.img) avec fastboot flash recovery.",
-  "devices": ["ac8257_demo"],
+  "devices": [
+    "ac8257_demo"
+  ],
   "image": "files/twrp.img",
   "partition": "recovery",
   "upstream": "https://github.com/LibreHU/android_device_alps_ac8257_demo/releases",
   "license": "GPL-3.0 (TWRP)",
-  "version_from": "prepare"
+  "version_from": "prepare",
+  "subcategory": "twrp",
+  "group": "twrp",
+  "group_name": "TWRP UJC201",
+  "group_description": "Recovery TWRP pour l'UJC201 (sauvegardes, flash de zips). Écrit dans la partition recovery.",
+  "variant": "Dernière version stable",
+  "order": 100
 }
