@@ -1,0 +1,53 @@
+{
+  "id": "kernel-{branch}",
+  "name": "Noyau LibreHU linux-stable {kver} + modules Wi-Fi / BT / GPS / FM",
+  "category": "kernel",
+  "description": "Noyau LibreHU de la branche {branch} : LibreHU-main avec les correctifs officiels linux-stable jusqu'à {kver}, KernelSU Next, menu de démarrage TWRP / Android / Fastboot (Android au bout de 3 s). En un seul zip avec ses modules Wi-Fi, Bluetooth, GPS et radio FM recompilés, qui remplacent ceux de /vendor/lib/modules (ce noyau refuse ceux du stock : CRC des symboles différents). Tout est vérifié avant d'écrire quoi que ce soit (empreintes, noyau de l'image = celui des modules, dm-verity, mémoire interne). État : {status}. Détail des correctifs : docs/STABLE.md du dépôt du noyau.",
+  "warning": "Remplace le noyau de la partition boot (bootloader déverrouillé nécessaire ; vbmeta n'est pas modifié) et les modules de connectivité de /vendor : dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img), le zip s'arrête sinon sans rien modifier. Sauvegardes dans /sdcard/LibreHU/backup : boot-<date>.img et conn-modules-orig. Retour arrière : flasher la sauvegarde de boot (TWRP : Install › Install Image › Boot) puis le zip conn-modules-stable-restore.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "include": [
+    "common/conn-modules.sh"
+  ],
+  "restore": "conn-modules-stable-restore",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/{branch}/docs/STABLE.md",
+  "license": "GPL-2.0 (Linux, pilotes MediaTek publiés par Samsung)",
+  "variants": [
+    {
+      "branch": "stable-4.9.150",
+      "kver": "4.9.150",
+      "status": "validé sur l'unité (démarrage, Wi-Fi, partage de connexion, Bluetooth, FM)"
+    },
+    {
+      "branch": "stable-4.9.200",
+      "kver": "4.9.200",
+      "status": "démarre sur l'unité, modules chargés ; le reste est à tester"
+    },
+    {
+      "branch": "stable-4.9.225",
+      "kver": "4.9.225",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.250",
+      "kver": "4.9.250",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.300",
+      "kver": "4.9.300",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.319",
+      "kver": "4.9.319",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.337",
+      "kver": "4.9.337",
+      "status": "pas encore testé sur l'unité (dernière version 4.9)"
+    }
+  ]
+}

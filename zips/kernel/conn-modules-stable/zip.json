@@ -1,11 +1,53 @@
 {
-  "id": "conn-modules-stable",
-  "name": "Modules Wi-Fi / BT / GPS / FM pour le noyau linux-stable (sans KernelSU)",
+  "id": "conn-modules-{branch}",
+  "name": "Modules Wi-Fi / BT / GPS / FM du noyau linux-stable {kver} (seuls)",
   "category": "kernel",
-  "description": "Pour le noyau LibreHU d'une branche linux-stable (stable-4.9.150) : ses modules Wi-Fi, Bluetooth, GPS et radio FM recompilés (wmt_drv, wmt_chrdev_wifi, wlan_drv_gen4m, bt_drv, gps_drv, fmradio_drv) remplacent ceux de /vendor/lib/modules, que ce noyau refuse (CRC des symboles différents). Même rôle que le module KernelSU librehu_connectivity_ksu.zip, sans KernelSU. Vérifie d'abord que la partition boot contient exactement ce noyau. Les modules d'origine sont sauvegardés dans /sdcard/LibreHU/backup/conn-modules-orig (une seule fois, jamais écrasés) et à chaque passage dans conn-modules-<date>.",
-  "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Avant de revenir à un autre noyau (LibreHU-main, stock), flasher le zip de retour arrière, sinon le Wi-Fi, le Bluetooth, le GPS et la FM ne marcheront plus. Expérimental : pilotes pas encore testés sur l'unité.",
-  "devices": ["ac8257_demo"],
+  "description": "Modules seuls, pour le noyau LibreHU de la branche {branch} (correctifs officiels linux-stable jusqu'à {kver}) déjà flashé dans boot : ses modules Wi-Fi, Bluetooth, GPS et radio FM recompilés (wmt_drv, wmt_chrdev_wifi, wlan_drv_gen4m, bt_drv, gps_drv, fmradio_drv) remplacent ceux de /vendor/lib/modules, que ce noyau refuse (CRC des symboles différents). Vérifie d'abord que la partition boot contient exactement ce noyau. Noyau et modules en une fois : zip kernel-{branch}. Les modules d'origine sont sauvegardés dans /sdcard/LibreHU/backup/conn-modules-orig (une seule fois, jamais écrasés) et à chaque passage dans conn-modules-<date>. État : {status}.",
+  "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Avant de revenir à un noyau sans ces modules (LibreHU-main, stock), flasher le zip de retour arrière, sinon le Wi-Fi, le Bluetooth, le GPS et la FM ne marcheront plus.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "include": [
+    "common/conn-modules.sh"
+  ],
   "restore": "conn-modules-stable-restore",
-  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/stable-4.9.150/docs/STABLE.md",
-  "license": "GPL-2.0 (pilotes MediaTek publiés par Samsung)"
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/{branch}/docs/STABLE.md",
+  "license": "GPL-2.0 (pilotes MediaTek publiés par Samsung)",
+  "variants": [
+    {
+      "branch": "stable-4.9.150",
+      "kver": "4.9.150",
+      "status": "validé sur l'unité (démarrage, Wi-Fi, partage de connexion, Bluetooth, FM)"
+    },
+    {
+      "branch": "stable-4.9.200",
+      "kver": "4.9.200",
+      "status": "démarre sur l'unité, modules chargés ; le reste est à tester"
+    },
+    {
+      "branch": "stable-4.9.225",
+      "kver": "4.9.225",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.250",
+      "kver": "4.9.250",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.300",
+      "kver": "4.9.300",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.319",
+      "kver": "4.9.319",
+      "status": "pas encore testé sur l'unité"
+    },
+    {
+      "branch": "stable-4.9.337",
+      "kver": "4.9.337",
+      "status": "pas encore testé sur l'unité (dernière version 4.9)"
+    }
+  ]
 }

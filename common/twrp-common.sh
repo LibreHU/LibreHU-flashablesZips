@@ -96,8 +96,9 @@ part_of() { case "$1" in $VENMNT/*) echo vendor;; *) echo system;; esac; }
 # --- Image de partition du zip (files/<image> + files/<image>.sha256) : $1 = image, $2 = partition (boot...)
 # Verifie l'empreinte et la taille, sauvegarde la partition actuelle dans $SDCARD/LibreHU/backup, ecrit, relit.
 flash_image() {
-	_img=$1; _pn=$2; _part=""
-	for _p in /dev/block/by-name/$_pn /dev/block/platform/*/by-name/$_pn /dev/block/platform/*/*/by-name/$_pn; do
+	_img=$1; _pn=$2
+	eval _part=\${UJC_PART_$_pn:-}  # essais hors autoradio : UJC_PART_boot=<fichier>
+	[ -n "$_part" ] || for _p in /dev/block/by-name/$_pn /dev/block/platform/*/by-name/$_pn /dev/block/platform/*/*/by-name/$_pn; do
 		[ -e "$_p" ] && { _part=$_p; break; }
 	done
 	[ -n "$_part" ] || abort "partition $_pn introuvable"
@@ -107,6 +108,7 @@ flash_image() {
 	[ "$(sha256sum $_t/files/$_img | cut -d' ' -f1)" = "$_e" ] || abort "image abimee (empreinte)"
 	_isz=$(stat -c %s $_t/files/$_img)
 	_psz=$(blockdev --getsize64 "$_part" 2>/dev/null)
+	[ -z "$_psz" ] && [ -f "$_part" ] && _psz=$(stat -c %s "$_part")
 	[ -n "$_psz" ] && [ "$_isz" -le "$_psz" ] || abort "image ($_isz octets) plus grande que la partition ($_psz)"
 	if [ -d $SDCARD ]; then
 		mkdir -p $SDCARD/LibreHU/backup

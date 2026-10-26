@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Builds every zip of zips/<category>/<id>/ into dist/, with dist/index.json for LibreHU Apps.
 
-Each item: zip.json (metadata), install.sh (body of update-binary, after common/twrp-common.sh), optional files/
-(copied into the zip) and prepare.sh <workdir> (fills <workdir>/files and <workdir>/version before packaging).
+Each item: zip.json (metadata), install.sh (body of update-binary, after common/twrp-common.sh and the files listed
+in "include"), optional files/ (copied into the zip) and prepare.sh <workdir> (fills <workdir>/files and
+<workdir>/version before packaging).
+"variants" (list of objects) builds one zip per entry from the same item: "{key}" in the string fields of zip.json is
+replaced by the value of the entry, and prepare.sh gets the entry in the environment as ZIP_<KEY>.
 """
 import hashlib
 import json
@@ -32,6 +35,8 @@ def sha256(path):
 
 def update_binary(meta, version, body):
     common = open(os.path.join(ROOT, "common", "twrp-common.sh")).read()
+    for inc in meta.get("include", []):
+        common += "\n" + open(os.path.join(ROOT, inc)).read()
     devices = " ".join(meta.get("devices", []))
     check = ""
     if devices:
@@ -54,8 +59,26 @@ def add_tree(z, src, arc):
             z.writestr(info, open(full, "rb").read())
 
 
-def build(item_dir):
-    meta = json.load(open(os.path.join(item_dir, "zip.json")))
+def expand(meta):
+    """zip.json without "variants": itself; with: one copy per entry, "{key}" replaced in its strings."""
+    variants = meta.pop("variants", None)
+    if not variants:
+        return [(meta, {})]
+
+    def sub(v, var):
+        if isinstance(v, str):
+            for k, x in var.items():
+                v = v.replace("{" + k + "}", x)
+            return v
+        if isinstance(v, list):
+            return [sub(i, var) for i in v]
+        if isinstance(v, dict):
+            return {k: sub(i, var) for k, i in v.items()}
+        return v
+    return [(sub(meta, var), var) for var in variants]
+
+
+def build(item_dir, meta, var):
     zid = meta["id"]
     work = os.path.join(BUILD, zid)
     shutil.rmtree(work, ignore_errors=True)
@@ -64,7 +87,8 @@ def build(item_dir):
         shutil.copytree(os.path.join(item_dir, "files"), os.path.join(work, "files"), dirs_exist_ok=True)
     prepare = os.path.join(item_dir, "prepare.sh")
     if os.path.exists(prepare):
-        subprocess.run(["sh", prepare, work], check=True)
+        env = dict(os.environ, **{"ZIP_" + k.upper(): v for k, v in var.items()})
+        subprocess.run(["sh", prepare, work], check=True, env=env)
     version = meta.get("version") or open(os.path.join(work, "version")).read().strip()
     body = open(os.path.join(item_dir, "install.sh")).read()
     out = os.path.join(DIST, f"{zid}.zip")
@@ -98,13 +122,14 @@ def main():
             d = os.path.join(zips, cat, zid)
             if not os.path.exists(os.path.join(d, "zip.json")):
                 continue
-            try:
-                e = build(d)
-                entries.append(e)
-                print(f"{e['category']}/{e['id']} {e['version']} {e['size']} B")
-            except Exception as ex:  # one zip failing does not stop the others
-                failed.append(zid)
-                print(f"!! {zid}: {ex}", file=sys.stderr)
+            for meta, var in expand(json.load(open(os.path.join(d, "zip.json")))):
+                try:
+                    e = build(d, meta, var)
+                    entries.append(e)
+                    print(f"{e['category']}/{e['id']} {e['version']} {e['size']} B")
+                except Exception as ex:  # one zip failing does not stop the others
+                    failed.append(meta["id"])
+                    print(f"!! {meta['id']}: {ex}", file=sys.stderr)
     cats = json.load(open(os.path.join(ROOT, "categories.json")))["categories"]
     index = {"generated": int(time.time()), "repo": REPO, "categories": cats, "zips": entries}
     json.dump(index, open(os.path.join(DIST, "index.json"), "w"), ensure_ascii=False, indent=2)
