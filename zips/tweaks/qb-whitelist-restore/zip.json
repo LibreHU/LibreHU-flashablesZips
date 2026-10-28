@@ -1,0 +1,16 @@
+{
+  "id": "qb-whitelist-restore",
+  "name": "Liste blanche QuickBoot d'origine",
+  "category": "tweaks",
+  "description": "Remet /vendor/etc/qb_list.xml tel qu'il était avant le zip « Applis LibreHU gardées en veille » (qb_list.xml.librehu-orig), sinon retire les seules lignes LibreHU.",
+  "warning": "dm-verity doit être désactivé sur /vendor : le zip s'arrête sinon, sans rien modifier.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "version": "1",
+  "subcategory": "standby",
+  "group": "quickboot",
+  "group_name": "Veille QuickBoot",
+  "variant": "Liste d'origine",
+  "order": 401
+}

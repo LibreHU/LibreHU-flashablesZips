@@ -1,0 +1,18 @@
+{
+  "id": "qb-whitelist",
+  "name": "Applis LibreHU gardées en veille (QuickBoot)",
+  "category": "tweaks",
+  "description": "Ajoute les applis LibreHU (service, launcher, téléphone, radio, BtnRemap, widgets, EasySource, Android Auto, CarPlay, disques, OTA, helper) et ViPER4Android à la liste blanche de QuickBoot, /vendor/etc/qb_list.xml. Sur cette ROM, chaque extinction de l'écran est un « QuickBoot power off » : QuickBootManager arrête de force toute appli absente de cette liste, le service LibreHU compris (alarmes perdues, plus de réponse au MCU au réveil : l'autoradio ne se rallume pas). Seules des lignes sont ajoutées, le reste du fichier ne change pas ; l'original est gardé à côté (qb_list.xml.librehu-orig) et copié dans /sdcard/LibreHU/backup/qb_list-<date>.",
+  "warning": "dm-verity doit être désactivé sur /vendor : le zip s'arrête sinon, sans rien modifier. Redémarrer ensuite : la liste est lue une fois, au démarrage. Retour : zip « Liste blanche QuickBoot d'origine ».",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "qb-whitelist-restore",
+  "version": "1",
+  "subcategory": "standby",
+  "group": "quickboot",
+  "group_name": "Veille QuickBoot",
+  "group_description": "Applis que QuickBoot (veille Autochips) n'arrête pas à l'extinction de l'écran.",
+  "variant": "Garder les applis LibreHU",
+  "order": 400
+}
