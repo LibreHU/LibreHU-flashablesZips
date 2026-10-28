@@ -1,0 +1,18 @@
+{
+  "id": "gapps-remove",
+  "name": "Supprimer les Google Apps",
+  "category": "tweaks",
+  "description": "Retire les Google Apps de la ROM (OpenGApps sur Android 9) : Play Services, Play Store, Services Framework, synchronisations et applis Google, avec leurs mises à jour et données dans /data. La liste vient de l'installeur OpenGApps lui-même (/system/addon.d/70-gapps.sh), sinon d'une liste connue. Les versions Google qui remplacent une appli AOSP retirée par OpenGApps (ExtServices, ExtShared, installateur de paquets, WebView, clavier) et ce que désignent des liens restants sont gardés. Tout est sauvegardé d'abord dans /sdcard/LibreHU/backup/gapps-<date> ; une erreur remet la sauvegarde.",
+  "warning": "Sans services Google : plus de Play Store, Google Maps, YouTube ni localisation par réseau (le GPS marche). Applis : LibreHU Apps, F-Droid, Aurora Store. dm-verity doit être désactivé sur /system : le zip s'arrête sinon, sans rien modifier. Retour : zip « Remettre les Google Apps (sauvegarde) ».",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "gapps-restore",
+  "version": "1",
+  "subcategory": "gapps",
+  "group": "gapps",
+  "group_name": "Google Apps",
+  "group_description": "Google Apps de la ROM stock (OpenGApps) : les retirer ou les remettre.",
+  "variant": "Supprimer les Google Apps",
+  "order": 300
+}

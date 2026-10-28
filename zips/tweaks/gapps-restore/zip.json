@@ -1,0 +1,16 @@
+{
+  "id": "gapps-restore",
+  "name": "Remettre les Google Apps (sauvegarde)",
+  "category": "tweaks",
+  "description": "Remet les Google Apps telles qu'elles étaient, depuis la sauvegarde la plus récente du zip « Supprimer les Google Apps » (/sdcard/LibreHU/backup/gapps-<date>) : fichiers de /system, contextes SELinux, mises à jour dans /data/app. Les données des applis Google ne sont pas sauvegardées : se reconnecter au compte. Les Google Apps ne sont pas incluses dans ce zip : sans sauvegarde, flasher soi-même OpenGApps (arm64, Android 9).",
+  "warning": "dm-verity doit être désactivé sur /system : le zip s'arrête sinon, sans rien modifier.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "version": "1",
+  "subcategory": "gapps",
+  "group": "gapps",
+  "group_name": "Google Apps",
+  "variant": "Remettre les Google Apps (sauvegarde)",
+  "order": 301
+}

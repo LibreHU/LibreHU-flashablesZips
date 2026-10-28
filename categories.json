@@ -72,6 +72,12 @@
           "id": "root",
           "name": "Root",
           "name_fr": "Root"
+        },
+        {
+          "id": "gapps",
+          "name": "Google Apps",
+          "name_fr": "Google Apps",
+          "description_fr": "Retirer ou remettre les Google Apps (OpenGApps) de la ROM stock."
         }
       ]
     },
