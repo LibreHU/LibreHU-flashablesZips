@@ -69,7 +69,7 @@
     {
       "branch": "stable-4.9.337",
       "kver": "4.9.337",
-      "status": "validé sur l'unité le 27/10 (USB, adb, MCU, Bluetooth, Wi-Fi, point d'accès, root, FM, GPIO, entrées vidéo, caméra) ; restent GPS avec antenne et veille (dernière version 4.9)",
+      "status": "validé sur l'unité le 27/10 (USB, adb, MCU, Bluetooth, Wi-Fi, point d'accès, root, FM, GPIO, entrées vidéo, caméra) ; r127 (30/10) : correctifs de la veille (écran noir au réveil, tactile, USB) et tensions d'overclock réellement appliquées au-dessus de 2,0 GHz, à tester ; restent GPS avec antenne, lecteur DVD USB et son au réveil (dernière version 4.9)",
       "order_k": "1326",
       "order_m": "1327"
     }
