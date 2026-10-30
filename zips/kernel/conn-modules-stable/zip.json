@@ -65,7 +65,7 @@
     {
       "branch": "stable-4.9.337",
       "kver": "4.9.337",
-      "status": "validé sur l'unité le 27/10 (USB, adb, MCU, Bluetooth, Wi-Fi, point d'accès, root, FM, GPIO, entrées vidéo, caméra) ; r127 (30/10) : correctifs de la veille (écran noir au réveil, tactile, USB) et tensions d'overclock réellement appliquées au-dessus de 2,0 GHz, à tester ; r128 (30/10) : boost tactile enfin effectif (il ne faisait rien) ; restent GPS avec antenne, lecteur DVD USB et son au réveil (dernière version 4.9)",
+      "status": "validé sur l'unité le 27/10 (USB, adb, MCU, Bluetooth, Wi-Fi, point d'accès, root, FM, GPIO, entrées vidéo, caméra) ; r127 (30/10) : correctifs de la veille (écran noir au réveil, tactile, USB) et tensions d'overclock réellement appliquées au-dessus de 2,0 GHz, à tester ; r128 (30/10) : boost tactile enfin effectif (il ne faisait rien) ; r129 (30/10) : tensions d'overclock de 1,05 V au plus (plafond de Vsram de la SSPM, mesuré : au-delà, Vsram restait sous Vproc ; 2,3 à 2,6 GHz), politique thermique LibreHU (CPU : reset 125 °C, freins 105 °C, régulation 100 °C ; carte : arrêt 105 °C, reset 107 °C), à tester ; restent GPS avec antenne, lecteur DVD USB et son au réveil (dernière version 4.9)",
       "order_k": "1326",
       "order_m": "1327"
     }
