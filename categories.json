@@ -27,9 +27,9 @@
         },
         {
           "id": "stable",
-          "name": "linux-stable kernels (4.9.150 to 4.9.337)",
-          "name_fr": "Noyaux linux-stable (4.9.150 à 4.9.337)",
-          "description_fr": "Correctifs officiels linux-stable par lots, du plus récent au plus ancien. Chaque version : noyau + modules, ou modules seuls. dm-verity doit être désactivé."
+          "name": "linux-stable kernel 4.9.337",
+          "name_fr": "Noyau linux-stable 4.9.337",
+          "description_fr": "Correctifs officiels linux-stable jusqu'à 4.9.337 : noyau + modules, ou modules seuls. dm-verity doit être désactivé."
         },
         {
           "id": "back",
