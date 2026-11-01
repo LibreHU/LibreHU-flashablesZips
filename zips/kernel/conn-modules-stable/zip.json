@@ -21,48 +21,6 @@
   "order": "{order_m}",
   "variants": [
     {
-      "branch": "stable-4.9.150",
-      "kver": "4.9.150",
-      "status": "validé sur l'unité (démarrage, Wi-Fi, partage de connexion, Bluetooth, FM)",
-      "order_k": "1700",
-      "order_m": "1701"
-    },
-    {
-      "branch": "stable-4.9.200",
-      "kver": "4.9.200",
-      "status": "démarre sur l'unité en 14 s (27/10), Wi-Fi, Bluetooth et GPS démarrés ; le reste est à tester",
-      "order_k": "1600",
-      "order_m": "1601"
-    },
-    {
-      "branch": "stable-4.9.225",
-      "kver": "4.9.225",
-      "status": "pas encore testé sur l'unité",
-      "order_k": "1550",
-      "order_m": "1551"
-    },
-    {
-      "branch": "stable-4.9.250",
-      "kver": "4.9.250",
-      "status": "pas encore testé sur l'unité",
-      "order_k": "1500",
-      "order_m": "1501"
-    },
-    {
-      "branch": "stable-4.9.300",
-      "kver": "4.9.300",
-      "status": "pas encore testé sur l'unité",
-      "order_k": "1400",
-      "order_m": "1401"
-    },
-    {
-      "branch": "stable-4.9.319",
-      "kver": "4.9.319",
-      "status": "pas encore testé sur l'unité",
-      "order_k": "1362",
-      "order_m": "1363"
-    },
-    {
       "branch": "stable-4.9.337",
       "kver": "4.9.337",
       "status": "validé sur l'unité le 27/10 (USB, adb, MCU, Bluetooth, Wi-Fi, point d'accès, root, FM, GPIO, entrées vidéo, caméra) ; r127 (30/10) : correctifs de la veille (écran noir au réveil, tactile, USB) et tensions d'overclock réellement appliquées au-dessus de 2,0 GHz, à tester ; r128 (30/10) : boost tactile enfin effectif (il ne faisait rien) ; r129 (30/10) : tensions d'overclock de 1,05 V au plus (plafond de Vsram de la SSPM, mesuré : au-delà, Vsram restait sous Vproc ; 2,3 à 2,6 GHz), politique thermique LibreHU (CPU : reset 125 °C, freins 105 °C, régulation 100 °C ; carte : arrêt 105 °C, reset 107 °C), à tester ; r130 (31/10) : filets de sécurité USB après la veille (resume_end envoyé par le noyau s'il manque, ports abandonnés ré-énumérés) et gadget USB protégé pendant les changements de fonctions (adb, MTP, CarPlay), à tester ; r133 (31/10, même code que r131) : limites de fréquence CPU respectées par tous les gouverneurs (le CPU pouvait rester au maximum quel que soit le gouverneur : limites figées par un changement de gouverneur, requêtes bornées deux fois), démarrage de la SSPM sous le maximum de démarrage, index d'OPP du vendor lus dans la table d'origine, GPU fixé à un OPP de nouveau bridé par le thermique, à tester ; r134 (01/11) : boost USB de MediaTek coupé par défaut (il gardait le CPU à 2,5 GHz au moins, la DRAM au maximum, tant qu'un PC utilisait le MTP : c'était le « toujours au maximum ») et réglable, par exemple depuis les Custom Controls de SmartPack (/sys/class/usb_boost/cpu_freq/enable, arg1, timeout), à tester ; restent GPS avec antenne, lecteur DVD USB et son au réveil (dernière version 4.9)",
