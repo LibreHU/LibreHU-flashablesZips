@@ -1,0 +1,16 @@
+{
+  "id": "jancar-settings-provider-restore",
+  "name": "Fournisseur de réglages LibreHU retiré",
+  "category": "tweaks",
+  "description": "Retire le fournisseur de réglages de LibreHU (zip « Réglages Jancar remplacés »). Sans lui et sans com.jancar.settings, la SystemUI d'origine plante en boucle : remettre l'appli de Jancar avant.",
+  "warning": "dm-verity doit être désactivé sur /system : le zip s'arrête sinon, sans rien modifier.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "version": "1",
+  "subcategory": "jancar",
+  "group": "jancar-settings",
+  "group_name": "Réglages Jancar remplacés",
+  "variant": "Retirer le fournisseur LibreHU",
+  "order": 501
+}

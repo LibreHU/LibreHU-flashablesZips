@@ -84,6 +84,12 @@
           "name": "Standby (QuickBoot)",
           "name_fr": "Veille (QuickBoot)",
           "description_fr": "Veille Autochips QuickBoot : applis LibreHU non arrêtées à l'extinction de l'écran."
+        },
+        {
+          "id": "jancar",
+          "name": "Without Jancar apps",
+          "name_fr": "Sans les applis Jancar",
+          "description_fr": "Remplacer ce qui manque quand on retire les applis de Jancar."
         }
       ]
     },

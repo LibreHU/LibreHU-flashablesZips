@@ -1,0 +1,18 @@
+{
+  "id": "jancar-settings-provider",
+  "name": "Réglages Jancar remplacés (SystemUI sans com.jancar.settings)",
+  "category": "tweaks",
+  "description": "Installe le fournisseur de réglages de LibreHU (org.librehu.jacsettings, content://com.jancar.settings.provider/settings) en appli système, pour pouvoir retirer l'appli Réglages de Jancar (com.jancar.settings) : la SystemUI d'origine lit ce fournisseur et s'y abonne, et plantait en boucle sans lui. Même table que celle de Jancar (_id, name, value), vide au départ : SystemUI garde ses valeurs par défaut. Tant que l'appli de Jancar est installée, c'est son fournisseur qui sert (Android garde le premier trouvé) ; le nôtre prend le relais dès qu'elle est retirée. APK de la release latest-main de LibreHU-service, empreinte vérifiée.",
+  "warning": "dm-verity doit être désactivé sur /system : le zip s'arrête sinon, sans rien modifier. Il ne retire pas com.jancar.settings (à retirer soi-même, sauvegarde d'abord). Redémarrer ensuite. Retour : zip « Fournisseur de réglages LibreHU retiré ».",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "jancar-settings-provider-restore",
+  "upstream": "https://github.com/LibreHU/LibreHU-service/tree/main/jacsettings",
+  "subcategory": "jancar",
+  "group": "jancar-settings",
+  "group_name": "Réglages Jancar remplacés",
+  "group_description": "Fournisseur com.jancar.settings.provider de LibreHU, pour retirer l'appli Réglages de Jancar sans que SystemUI plante.",
+  "variant": "Installer le fournisseur LibreHU",
+  "order": 500
+}
