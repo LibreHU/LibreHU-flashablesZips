@@ -62,8 +62,7 @@ toutes les heures (nouvelle release TWRP ou nouveau noyau repris ainsi ; rien n'
 ## Origine
 Les scripts audio viennent de `tools/ac8257/audio/twrp/` du dépôt du noyau [android_kernel_autochips_ac8257_4.9](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/reverse-engineering/tools/ac8257/audio), qui reste la référence pour leur analyse
 ([docs/ujc201/audio_deep_buffer.md](https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/blob/reverse-engineering/docs/ujc201/audio_deep_buffer.md)).
-Licences : celles des projets d'origine (TWRP GPL-3.0, ViPERFX_RE GPL-2.0, fichier `LICENSE` inclus dans le zip du
-pilote) ; scripts LibreHU sous la même licence que le dépôt de l'appareil.
+
 
 ## Soutenir le projet
 
@@ -73,6 +72,18 @@ but non lucratif, dons récurrents) :
 
 [![Faire un don avec Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/DokT/donate)
 [![Donateurs sur Liberapay](https://img.shields.io/liberapay/patrons/DokT.svg?logo=liberapay)](https://liberapay.com/DokT/)
+
+## Licence
+
+Copyright (C) 2026 les contributeurs de LibreHU.
+
+Les scripts de ce dépôt (`tools/`, `zips/*/install.sh`, `prepare.sh`, `common/`) sont sous **GNU AGPL v3 ou ultérieure** (`AGPL-3.0-or-later`, fichier [`LICENSE`](LICENSE)), avec les
+[termes additionnels](LICENSE-ADDITIONAL-TERMS.md) de son article 7 : garder la mention « Basé sur LibreHU –
+https://github.com/LibreHU » et marquer une version modifiée comme telle. Qui distribue une version modifiée, ou la
+fait utiliser à distance, doit en donner le code source complet sous la même licence.
+
+Les zips construits gardent la licence des projets qu'ils contiennent (TWRP : GPL-3.0, ViPERFX_RE et
+noyau : GPL-2.0, fichier `LICENSE` du projet inclus dans le zip), champ `license` de `dist/index.json`.
 
 ## Contact
 
