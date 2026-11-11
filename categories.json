@@ -90,6 +90,12 @@
           "name": "Without Jancar apps",
           "name_fr": "Sans les applis Jancar",
           "description_fr": "Remplacer ce qui manque quand on retire les applis de Jancar."
+        },
+        {
+          "id": "network",
+          "name": "Network",
+          "name_fr": "Réseau",
+          "description_fr": "Internet par USB : partage de connexion d'un téléphone Android."
         }
       ]
     },

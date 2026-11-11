@@ -1,0 +1,16 @@
+{
+  "id": "usb-tethering",
+  "name": "Partage de connexion USB d'un téléphone Android",
+  "category": "tweaks",
+  "description": "Android 9 ne prend comme réseau filaire que les interfaces eth0, eth1… ; le partage de connexion USB d'un téléphone Android (RNDIS ou NCM) s'appelle usb0 sous Linux, il était ignoré (pas d'internet). Ce zip pose une surcouche statique du système (/vendor/overlay/LibreHUEthernetUsb) qui fait prendre aussi usb0, usb1… (réglage config_ethernet_iface_regex = (eth|usb)\\d+, la valeur par défaut d'Android 15). Les adaptateurs Ethernet USB et l'iPhone marchaient déjà. Avec Android Auto sans fil, le téléphone branché en USB donne internet à l'autoradio pendant qu'Android Auto passe par le Wi-Fi.",
+  "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier. Redémarrage nécessaire. Le noyau doit avoir le pilote RNDIS : noyau linux-stable 4.9.337, ou zip usb-net avec le noyau stock.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "usb-tethering-restore",
+  "upstream": "https://github.com/LibreHU/LibreHU-flashablesZips/tree/main/zips/tweaks/usb-tethering/overlay",
+  "license": "AGPL-3.0-or-later",
+  "version": "1",
+  "subcategory": "network",
+  "order": 600
+}

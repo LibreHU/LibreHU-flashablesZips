@@ -1,0 +1,13 @@
+{
+  "id": "usb-tethering-restore",
+  "name": "Partage de connexion USB : retrait de la surcouche",
+  "category": "tweaks",
+  "description": "Supprime /vendor/overlay/LibreHUEthernetUsb : Android ne prend de nouveau que les interfaces eth0, eth1… (usb0 ignoré).",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "hidden": true,
+  "version": "1",
+  "subcategory": "network",
+  "order": 601
+}

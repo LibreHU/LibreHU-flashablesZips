@@ -1,0 +1,42 @@
+name: USB tethering overlay test (Android 9)
+
+# The overlay of the zip usb-tethering on an Android 9 emulator: Android's EthernetTracker without, then with it,
+# with a veth pair named like a phone's USB tethering (usb0) and a DHCP server on the other end
+# (tools/usb_tethering_test.py). Outputs in the "usb-tethering-test" artifact.
+on:
+  push:
+    branches: [main]
+    paths:
+      - zips/tweaks/usb-tethering/**
+      - tools/usb_tethering_test.py
+      - .github/workflows/usb-tethering-test.yml
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: On Android 9
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          target: default
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -writable-system -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: python3 tools/usb_tethering_test.py zips/tweaks/usb-tethering/files/LibreHUEthernetUsb.apk out
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: usb-tethering-test
+          path: out

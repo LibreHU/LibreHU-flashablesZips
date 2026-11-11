@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LibreHU (zip usb-tethering): static overlay of the framework. Android 9's EthernetTracker only takes the interfaces
+     matching config_ethernet_iface_regex, "eth\d" by default; the USB tethering of an Android phone (rndis_host,
+     cdc_ncm) is named usb0 by Linux, so it was ignored. Static: read by system_server at boot (EthernetService). -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.librehu.overlay.ethernetusb"
+    android:versionCode="1"
+    android:versionName="1">
+    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="28" />
+    <overlay
+        android:targetPackage="android"
+        android:isStatic="true"
+        android:priority="200" />
+    <application android:hasCode="false" />
+</manifest>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wired Ethernet interfaces taken by Android: eth* (USB Ethernet adapters, iPhone) and usb* (USB tethering of an
+         Android phone, RNDIS or NCM). Same as the default of Android 15 and later ("(usb|eth)\d+"). -->
+    <string name="config_ethernet_iface_regex" translatable="false">(eth|usb)\\d+</string>
+</resources>
