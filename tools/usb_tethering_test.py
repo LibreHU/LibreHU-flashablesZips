@@ -61,6 +61,17 @@ def reboot():
     boot()
 
 
+def remount(name):
+    """System and vendor writable until the next reboot (-writable-system emulator)."""
+    out = adb("remount", timeout=180)
+    if "remount succeeded" not in out:
+        save(name.replace(".txt", "-first.txt"), out)
+        adb("disable-verity", timeout=120)
+        reboot()
+        out = adb("remount", timeout=180)
+    save(name, out)
+
+
 def filter_line(dump):
     m = re.search(r"Ethernet interface name filter: (\S+)", dump)
     return m.group(1) if m else None
@@ -90,13 +101,7 @@ def main():
     check("Android 9", sh("getprop ro.build.version.sdk").strip() == "28")
 
     # The head unit's USB host feature, which starts EthernetService (writable system and vendor first).
-    out = adb("remount", timeout=180)
-    if "remount succeeded" not in out:
-        save("remount-1.txt", out)
-        adb("disable-verity", timeout=120)
-        reboot()
-        out = adb("remount", timeout=180)
-    save("remount.txt", out)
+    remount("remount.txt")
     feature = os.path.join(OUT, "android.hardware.usb.host.xml")
     with open(feature, "w", encoding="utf-8") as f:
         f.write('<permissions>\n    <feature name="android.hardware.usb.host" />\n</permissions>\n')
@@ -117,6 +122,7 @@ def main():
 
     # The overlay where the zip puts it, then a reboot (zygote makes the idmap of static overlays at its start,
     # system_server reads the filter once, at its start).
+    remount("remount-2.txt")  # read-only again after each reboot
     save("push.txt", adb("push", APK, APK_ON_DEVICE))
     sh(f"chmod 0644 {APK_ON_DEVICE}; chcon u:object_r:vendor_overlay_file:s0 {APK_ON_DEVICE}")
     save("overlay-files.txt", sh("ls -laZ /vendor/overlay"))
