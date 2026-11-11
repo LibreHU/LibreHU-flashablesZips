@@ -146,6 +146,9 @@ def main():
         return finish()
     # The phone's side: an address and a DHCP server on phone0, then usb0 must get an address.
     sh("ip addr add 192.168.42.129/24 dev phone0")
+    # The phone is another machine; here its side shares the emulator's routing, where Android's policy rules send
+    # unmarked traffic to the default network: the DHCP replies to 192.168.42.0/24 must leave by phone0 (main table).
+    sh("ip rule add to 192.168.42.0/24 lookup main pref 9000")
     sh("nohup /system/bin/dnsmasq --keep-in-foreground --no-resolv --no-poll --bind-interfaces --interface=phone0 "
        "--except-interface=lo --dhcp-range=192.168.42.10,192.168.42.20,1h --dhcp-option=3,192.168.42.129 "
        "--dhcp-option=6,192.168.42.129 --dhcp-leasefile=/data/local/tmp/dnsmasq.leases --pid-file=/data/local/tmp/dnsmasq.pid --log-dhcp "
@@ -162,6 +165,7 @@ def main():
     save("dnsmasq.txt", sh("cat /data/local/tmp/dnsmasq.log; ps -A | grep dnsmasq"))
     save("ethernet-dhcp.txt", sh("dumpsys ethernet"))
     save("connectivity.txt", sh("dumpsys connectivity"))
+    save("ip-rules.txt", sh("ip rule; echo; ip route show table main"))
     m = re.search(r"inet (192\.168\.42\.\d+)", addr)
     check("usb0 address from DHCP", m is not None, m.group(1) if m else "none")
     finish()
