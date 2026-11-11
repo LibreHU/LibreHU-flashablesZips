@@ -129,9 +129,11 @@ def main():
     reboot()
     save("resource-cache.txt", sh("ls -laZ /data/resource-cache; echo; cat /data/resource-cache/overlays.list"))
 
-    overlays = sh("cmd overlay list")
-    save("overlays.txt", overlays + "\n\n" + sh("dumpsys overlay"))
-    check("overlay known to Android", "org.librehu.overlay.ethernetusb" in overlays)
+    # Static overlays are not in `cmd overlay list`: their state is in `dumpsys overlay`.
+    overlays = sh("dumpsys overlay")
+    save("overlays.txt", overlays)
+    m = re.search(r"org\.librehu\.overlay\.ethernetusb:0 \{.*?mState\.*: (\w+)", overlays, re.S)
+    check("overlay applied (static, with its idmap)", m is not None and m.group(1) == "STATE_ENABLED_STATIC", m.group(1) if m else "absent")
     veth = veth_up()
     time.sleep(8)
     dump = sh("dumpsys ethernet")
@@ -146,7 +148,7 @@ def main():
     sh("ip addr add 192.168.42.129/24 dev phone0")
     sh("nohup /system/bin/dnsmasq --keep-in-foreground --no-resolv --no-poll --bind-interfaces --interface=phone0 "
        "--except-interface=lo --dhcp-range=192.168.42.10,192.168.42.20,1h --dhcp-option=3,192.168.42.129 "
-       "--dhcp-option=6,192.168.42.129 --dhcp-leasefile=/data/local/tmp/dnsmasq.leases "
+       "--dhcp-option=6,192.168.42.129 --dhcp-leasefile=/data/local/tmp/dnsmasq.leases --pid-file=/data/local/tmp/dnsmasq.pid --log-dhcp "
        "> /data/local/tmp/dnsmasq.log 2>&1 &")
     # Link down and up again: EthernetNetworkFactory starts IpClient (DHCP) when the link comes up.
     sh("ip link set usb0 down; sleep 2; ip link set usb0 up")
