@@ -4,13 +4,11 @@
 ui_print "UJC201 - Partage de connexion USB : retrait de la surcouche"
 ui_print "-----------------------------------------------------------"
 mount_rw
-d=$VENMNT/overlay/LibreHUEthernetUsb
-if [ -d $d ]; then
-	rm -rf $d && ui_print "$d : supprime"
-	ui_print " "
-	ui_print "Termine, redemarrer."
-else
-	ui_print "Rien a retirer."
-fi
+N=0
+for d in $VENMNT/overlay/LibreHUEthernetUsb.apk $VENMNT/overlay/LibreHUEthernetUsb; do
+	[ -e $d ] && rm -rf $d && ui_print "$d : supprime" && N=$((N + 1))
+done
+ui_print " "
+[ $N -gt 0 ] && ui_print "Termine, redemarrer." || ui_print "Rien a retirer."
 cleanup
 exit 0

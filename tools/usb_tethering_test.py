@@ -14,7 +14,9 @@ import sys
 import time
 
 APK, OUT = sys.argv[1:3]
-DIR = "/vendor/overlay/LibreHUEthernetUsb"
+APK_ON_DEVICE = "/vendor/overlay/LibreHUEthernetUsb.apk"
+# The feature that starts EthernetService (SystemServer): the head unit has it, the emulator does not.
+USB_HOST = "/vendor/etc/permissions/android.hardware.usb.host.xml"
 results, failures = [], []
 
 
@@ -87,6 +89,23 @@ def main():
     save("getprop.txt", sh("getprop"))
     check("Android 9", sh("getprop ro.build.version.sdk").strip() == "28")
 
+    # The head unit's USB host feature, which starts EthernetService (writable system and vendor first).
+    out = adb("remount", timeout=180)
+    if "remount succeeded" not in out:
+        save("remount-1.txt", out)
+        adb("disable-verity", timeout=120)
+        reboot()
+        out = adb("remount", timeout=180)
+    save("remount.txt", out)
+    feature = os.path.join(OUT, "android.hardware.usb.host.xml")
+    with open(feature, "w", encoding="utf-8") as f:
+        f.write('<permissions>\n    <feature name="android.hardware.usb.host" />\n</permissions>\n')
+    adb("push", feature, USB_HOST)
+    sh(f"chmod 0644 {USB_HOST}; chcon u:object_r:vendor_configs_file:s0 {USB_HOST}")
+    save("usb-host.txt", sh(f"cat {USB_HOST}; ls -lZ {USB_HOST}"))
+    reboot()
+    check("USB host feature", "android.hardware.usb.host" in sh("pm list features"))
+
     # Without the overlay: Android 9's default.
     veth_up()
     time.sleep(8)
@@ -96,19 +115,13 @@ def main():
     check("usb0 ignored without the overlay", "usb0" not in tracked(dump), ", ".join(sorted(tracked(dump))) or "none tracked")
     sh("ip link del usb0")
 
-    # The overlay where the zip puts it, then a reboot (system_server reads the filter once, at its start).
-    out = adb("remount", timeout=180)
-    if "remount succeeded" not in out:
-        save("remount-1.txt", out)
-        adb("disable-verity", timeout=120)
-        reboot()
-        out = adb("remount", timeout=180)
-    save("remount.txt", out)
-    sh(f"mkdir -p {DIR}")
-    save("push.txt", adb("push", APK, f"{DIR}/LibreHUEthernetUsb.apk"))
-    sh(f"chmod 0755 {DIR}; chmod 0644 {DIR}/LibreHUEthernetUsb.apk; chcon -R u:object_r:vendor_overlay_file:s0 {DIR}")
-    save("overlay-files.txt", sh(f"ls -laZ {DIR}"))
+    # The overlay where the zip puts it, then a reboot (zygote makes the idmap of static overlays at its start,
+    # system_server reads the filter once, at its start).
+    save("push.txt", adb("push", APK, APK_ON_DEVICE))
+    sh(f"chmod 0644 {APK_ON_DEVICE}; chcon u:object_r:vendor_overlay_file:s0 {APK_ON_DEVICE}")
+    save("overlay-files.txt", sh("ls -laZ /vendor/overlay"))
     reboot()
+    save("resource-cache.txt", sh("ls -laZ /data/resource-cache; echo; cat /data/resource-cache/overlays.list"))
 
     overlays = sh("cmd overlay list")
     save("overlays.txt", overlays + "\n\n" + sh("dumpsys overlay"))

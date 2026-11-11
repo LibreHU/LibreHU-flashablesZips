@@ -17,13 +17,15 @@ while read -r SUM NAME; do
 done < $TMPD/files/SHA256SUMS
 [ -d $VENMNT/overlay ] || abort "$VENMNT/overlay introuvable"
 
-DST=$VENMNT/overlay/LibreHUEthernetUsb
-rm -rf $DST; mkdir -p $DST || abort "dossier $DST impossible (vendor plein ?)"
-cp $TMPD/files/LibreHUEthernetUsb.apk $DST/ || abort "copie de la surcouche impossible (vendor plein ?)"
-chmod 0755 $DST; chmod 0644 $DST/LibreHUEthernetUsb.apk; chown -R 0:0 $DST 2>/dev/null
+# Fichier pose directement dans /vendor/overlay : le zygote d'Android 9 (idmap --scan) n'y lit que les fichiers, pas les
+# sous-dossiers ; sans son idmap, une surcouche statique du framework n'est pas appliquee.
+rm -rf $VENMNT/overlay/LibreHUEthernetUsb
+DST=$VENMNT/overlay/LibreHUEthernetUsb.apk
+cp $TMPD/files/LibreHUEthernetUsb.apk $DST || abort "copie de la surcouche impossible (vendor plein ?)"
+chmod 0644 $DST; chown 0:0 $DST 2>/dev/null
 # contexte des surcouches de vendor (file_contexts d'Android 9)
-[ -z "$UJC_TEST" ] && chcon -R u:object_r:vendor_overlay_file:s0 $DST
-ui_print "$DST/LibreHUEthernetUsb.apk"
+[ -z "$UJC_TEST" ] && chcon u:object_r:vendor_overlay_file:s0 $DST
+ui_print "$DST"
 rm -rf $TMPD
 
 ui_print " "
