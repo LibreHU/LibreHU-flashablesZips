@@ -12,6 +12,8 @@ ui_print "UJC201 - ViPER4Android RE (pilote $V4A_VERSION) sans Magisk"
 ui_print "-----------------------------------------------------------"
 mount_rw
 [ -d $SDCARD ] || abort "memoire interne non montee (/data dechiffre ?) : pas de copie de sauvegarde possible"
+# retire par viper4android-re-restore : la ROM LineageOS LibreHU peut de nouveau le mettre a jour
+[ -f $SDCARD/LibreHU/no-viper ] && rm -f $SDCARD/LibreHU/no-viper && ui_print "$SDCARD/LibreHU/no-viper supprime"
 TMPD=${UJC_TMP:-/tmp}/ujc201_v4a; rm -rf $TMPD; mkdir -p $TMPD
 unzip -o -q "$ZIPFILE" 'files/*' -d $TMPD || abort "extraction du zip impossible"
 

@@ -2,12 +2,12 @@
   "id": "viper4android-re-restore",
   "name": "ViPER4Android RE : retrait du pilote",
   "category": "drivers",
-  "description": "Remet les audio_effects d'origine (sauvegardés par le zip d'installation) et supprime libv4a_re.so.",
+  "description": "Remet les audio_effects d'origine (sauvegardés par le zip d'installation) et supprime libv4a_re.so. Crée /sdcard/LibreHU/no-viper : le zip de la ROM LineageOS LibreHU ne remet plus le pilote (le zip d'installation supprime ce fichier).",
   "devices": [
     "ac8257_demo"
   ],
   "hidden": true,
-  "version": "1",
+  "version": "2",
   "subcategory": "audio",
   "order": 101
 }
