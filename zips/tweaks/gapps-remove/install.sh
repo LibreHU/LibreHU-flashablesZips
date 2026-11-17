@@ -7,11 +7,11 @@
 # Tout est d'abord sauvegarde (tar + contextes SELinux) dans /sdcard/LibreHU/backup/gapps-<date> ; une erreur pendant
 # la suppression remet la sauvegarde. Retour : zip gapps-restore.
 
-ui_print "UJC201 - suppression des Google Apps"
+ui_print "UJC201 - Google Apps removal"
 ui_print "------------------------------------"
 mount_rw
 S=$(sysdir)
-[ -d $S/app ] || abort "dossier system introuvable ($S)"
+[ -d $S/app ] || abort "system folder not found ($S)"
 DATA=${UJC_DATA:-/data}
 
 # --- Detection d'OpenGApps
@@ -19,9 +19,9 @@ ADDOND=$S/addon.d/70-gapps.sh
 GPROP=$S/etc/g.prop
 gprop() { grep "^$1=" $GPROP 2>/dev/null | head -n1 | cut -d= -f2-; }
 if [ -f $GPROP ]; then
-	ui_print "OpenGApps : $(gprop ro.addon.open_type) $(gprop ro.addon.open_version) (Android $(gprop ro.addon.sdk), $(gprop ro.addon.arch))"
+	ui_print "OpenGApps: $(gprop ro.addon.open_type) $(gprop ro.addon.open_version) (Android $(gprop ro.addon.sdk), $(gprop ro.addon.arch))"
 else
-	ui_print "Pas de /system/etc/g.prop : OpenGApps non detecte"
+	ui_print "No /system/etc/g.prop: OpenGApps not detected"
 fi
 
 # --- Ce qui sera retire (chemins relatifs au dossier system)
@@ -31,7 +31,7 @@ if [ -f $ADDOND ]; then
 	sed -n '/^list_files() {/,/^}/p' $ADDOND | sed -e '1,/cat <<EOF/d' -e '/^EOF/,$d' | while read -r f r; do
 		[ -n "$f" ] && echo "$f" >> $L
 	done
-	ui_print "Liste de l'installeur (70-gapps.sh) : $(wc -l < $L) fichiers"
+	ui_print "Installer list (70-gapps.sh): $(wc -l < $L) files"
 fi
 # Dossiers Google connus (ROM sans 70-gapps.sh, ou fichiers qu'il ne liste pas)
 KNOWN="GmsCore PrebuiltGmsCore PrebuiltGmsCorePi PrebuiltGmsCorePix GoogleServicesFramework Phonesky GoogleLoginService
@@ -87,7 +87,7 @@ if [ -s $LK ]; then
 	: > $L.k
 	while read -r f; do
 		used=$(while read -r t rel; do case "$t" in "$f"|"$f"/*) echo "$rel"; break;; esac; done < $LK)
-		if [ -n "$used" ]; then ui_print "Garde $f (lien depuis $used)"; else echo "$f" >> $L.k; fi
+		if [ -n "$used" ]; then ui_print "Kept $f (link from $used)"; else echo "$f" >> $L.k; fi
 	done < $L
 	mv $L.k $L
 fi
@@ -100,7 +100,7 @@ keep_if_no_aosp() {
 	pat=$1; shift
 	if ! aosp "$@" && grep -qiE "$pat" $L; then
 		KEEP="$KEEP|$pat"
-		ui_print "Garde (pas d'equivalent AOSP $*) : $(grep -iE "$pat" $L | tr '\n' ' ')"
+		ui_print "Kept (no AOSP equivalent $*): $(grep -iE "$pat" $L | tr '\n' ' ')"
 	fi
 }
 keep_if_no_aosp 'ExtServices' ExtServices
@@ -115,10 +115,10 @@ fi
 : > $L.e; while read -r f; do [ -e $S/$f ] || [ -L $S/$f ] && echo "$f" >> $L.e; done < $L; mv $L.e $L
 N=$(wc -l < $L)
 if [ "$N" -eq 0 ]; then
-	ui_print "Aucune Google App dans /system : rien a faire."
+	ui_print "No Google App in /system: nothing to do."
 	rm -f $L; cleanup; exit 0
 fi
-ui_print "A retirer de /system : $N elements"
+ui_print "To remove from /system: $N items"
 require_no_verity system
 
 # Paquets Google dont les mises a jour (/data/app) et les donnees partent aussi
@@ -143,33 +143,33 @@ for p in $PKGS; do
 done
 
 # --- Sauvegarde (avant toute modification)
-[ -d $SDCARD ] || abort "memoire interne non montee (/data dechiffre ?) : pas de sauvegarde possible, rien n'a ete modifie"
+[ -d $SDCARD ] || abort "internal storage not mounted (/data decrypted?): no backup possible, nothing was changed"
 NEED=$(cd $S && du -sk $(cat $L) 2>/dev/null | awk '{s+=$1} END {print s+0}')
 for d in $DAPPS; do NEED=$((NEED + $(du -sk $DATA/app/$d | cut -f1))); done
 FREE=$(df -k $SDCARD | tail -n1 | awk '{print $4}')
-[ -n "$FREE" ] && [ "$FREE" -gt $((NEED + NEED / 5 + 51200)) ] || abort "place insuffisante pour la sauvegarde ($((NEED / 1024)) Mo a sauvegarder, $((${FREE:-0} / 1024)) Mo libres), rien n'a ete modifie"
+[ -n "$FREE" ] && [ "$FREE" -gt $((NEED + NEED / 5 + 51200)) ] || abort "not enough space for the backup ($((NEED / 1024)) MB to back up, $((${FREE:-0} / 1024)) MB free), nothing was changed"
 BK=$SDCARD/LibreHU/backup/gapps-$(date +%Y%m%d-%H%M%S)
-mkdir -p $BK || abort "dossier $BK impossible"
-(cd $S && tar -cf $BK/system.tar $(cat $L)) || abort "sauvegarde (tar) impossible, rien n'a ete modifie"
+mkdir -p $BK || abort "cannot create folder $BK"
+(cd $S && tar -cf $BK/system.tar $(cat $L)) || abort "cannot make the backup (tar), nothing was changed"
 : > $BK/contexts.txt
 (cd $S && find $(cat $L) 2>/dev/null) | while read -r f; do
 	c=$(ls -Zd $S/$f 2>/dev/null | tr ' ' '\n' | grep '^u:object_r:' | head -n1)
 	[ -n "$c" ] && echo "$c $f" >> $BK/contexts.txt
 done
 if [ -n "$DAPPS" ]; then
-	(cd $DATA/app && tar -cf $BK/data_app.tar $DAPPS) || abort "sauvegarde des mises a jour Google ($DATA/app) impossible, rien n'a ete modifie"
+	(cd $DATA/app && tar -cf $BK/data_app.tar $DAPPS) || abort "cannot back up the Google updates ($DATA/app), nothing was changed"
 fi
 cp $L $BK/files.txt
 [ -f $GPROP ] && cp $GPROP $BK/g.prop
 echo "$DAPPS" > $BK/data_app.txt
-ui_print "Sauvegarde : $BK ($((NEED / 1024)) Mo)"
+ui_print "Backup: $BK ($((NEED / 1024)) MB)"
 
 # --- Retour a la sauvegarde si une etape echoue
 rollback() {
-	ui_print "ERREUR : $1 ; remise de la sauvegarde"
-	(cd $S && tar -xpf $BK/system.tar) || ui_print "remise impossible : flasher le zip gapps-restore"
+	ui_print "ERROR: $1; putting the backup back"
+	(cd $S && tar -xpf $BK/system.tar) || ui_print "cannot put it back: flash the gapps-restore zip"
 	while read -r c f; do chcon -h $c $S/$f 2>/dev/null; done < $BK/contexts.txt
-	abort "Google Apps laissees en place"
+	abort "Google Apps left in place"
 }
 
 # --- Suppression
@@ -187,11 +187,11 @@ for f in $(cat $L); do
 done
 sync
 ui_print " "
-ui_print "Google Apps retirees ($N elements de /system, $(echo $DAPPS | wc -w) mises a jour)."
-ui_print "Redemarrer (le premier demarrage est plus long)."
-ui_print "Sans services Google : pas de Play Store ni de Google Maps ;"
-ui_print "applis : LibreHU Apps, F-Droid, Aurora Store."
-ui_print "Retour : zip gapps-restore (sauvegarde $BK)."
+ui_print "Google Apps removed ($N items of /system, $(echo $DAPPS | wc -w) updates)."
+ui_print "Reboot (the first boot takes longer)."
+ui_print "Without Google services: no Play Store nor Google Maps;"
+ui_print "apps: LibreHU Apps, F-Droid, Aurora Store."
+ui_print "To go back: gapps-restore zip (backup $BK)."
 rm -f $L
 cleanup
 exit 0

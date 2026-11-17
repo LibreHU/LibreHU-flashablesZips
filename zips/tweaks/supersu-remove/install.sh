@@ -5,11 +5,11 @@
 # Tout est d'abord sauvegarde (tar + contextes SELinux) dans /sdcard/LibreHU/backup/supersu-<date> ; une erreur pendant
 # la suppression remet la sauvegarde. Retour : zip supersu-restore.
 
-ui_print "UJC201 - suppression de SuperSU"
+ui_print "UJC201 - SuperSU removal"
 ui_print "-------------------------------"
 mount_rw
 S=$(sysdir)
-[ -d $S/bin ] || abort "dossier system introuvable ($S)"
+[ -d $S/bin ] || abort "system folder not found ($S)"
 DATAAPP=${UJC_DATAAPP:-/data/app}
 
 # Fichiers que l'installeur de SuperSU cree, deplace ou remplace (relatifs au dossier system)
@@ -24,10 +24,10 @@ for f in xbin/daemonsu app/SuperSU priv-app/SuperSU bin/app_process64_original b
 	[ -e $S/$f ] && present="$present $f"
 done
 if [ -z "$present" ]; then
-	ui_print "SuperSU absent de /system : rien a faire."
+	ui_print "SuperSU not in /system: nothing to do."
 	cleanup; exit 0
 fi
-ui_print "SuperSU trouve :$present"
+ui_print "SuperSU found:$present"
 require_no_verity system
 
 # Le root doit rester possible : le noyau de la partition boot doit contenir KernelSU (noyau LibreHU).
@@ -54,18 +54,18 @@ if [ -n "$BOOT" ] && [ "$(dd if=$BOOT bs=8 count=1 2>/dev/null)" = "ANDROID!" ];
 	fi
 fi
 case $KSU in
-	yes) ui_print "Noyau de boot avec KernelSU : OK";;
-	no) abort "le noyau de la partition boot n'a pas KernelSU : sans SuperSU il n'y aurait plus de root. Flasher d'abord un noyau LibreHU (zips Noyau). Rien n'a ete modifie.";;
-	*) ui_print "Noyau de boot non verifiable : verifier soi-meme qu'il a KernelSU (noyau LibreHU)";;
+	yes) ui_print "Boot kernel with KernelSU: OK";;
+	no) abort "the kernel of the boot partition has no KernelSU: without SuperSU there would be no root any more. Flash a LibreHU kernel first (Kernel zips). Nothing was changed.";;
+	*) ui_print "Boot kernel cannot be checked: check yourself that it has KernelSU (LibreHU kernel)";;
 esac
 
 # --- Sauvegarde
-[ -d $SDCARD ] || abort "memoire interne non montee (/data dechiffre ?) : pas de sauvegarde possible, rien n'a ete modifie"
+[ -d $SDCARD ] || abort "internal storage not mounted (/data decrypted?): no backup possible, nothing was changed"
 BK=$SDCARD/LibreHU/backup/supersu-$(date +%Y%m%d-%H%M%S)
-mkdir -p $BK || abort "dossier $BK impossible"
+mkdir -p $BK || abort "cannot create folder $BK"
 LIST=""
 for f in $SU_FILES; do [ -e $S/$f ] || [ -L $S/$f ] && LIST="$LIST $f"; done
-(cd $S && tar -cf $BK/system.tar $LIST) || abort "sauvegarde (tar) impossible, rien n'a ete modifie"
+(cd $S && tar -cf $BK/system.tar $LIST) || abort "cannot make the backup (tar), nothing was changed"
 # Contextes SELinux : champ u:object_r:... de ls -Z (toybox ou busybox)
 : > $BK/contexts.txt
 for f in $LIST; do
@@ -75,18 +75,18 @@ done
 DAPPS=""
 for d in $DATAAPP/eu.chainfire.supersu*; do [ -d "$d" ] && DAPPS="$DAPPS ${d##*/}"; done
 if [ -n "$DAPPS" ]; then
-	(cd $DATAAPP && tar -cf $BK/data_app.tar $DAPPS) || abort "sauvegarde de la mise a jour de SuperSU ($DATAAPP) impossible, rien n'a ete modifie"
+	(cd $DATAAPP && tar -cf $BK/data_app.tar $DAPPS) || abort "cannot back up the SuperSU update ($DATAAPP), nothing was changed"
 fi
 echo "$LIST" > $BK/files.txt
-ui_print "Sauvegarde : $BK"
+ui_print "Backup: $BK"
 
 # --- Retour a la sauvegarde si une etape echoue
 rollback() {
-	ui_print "ERREUR : $1 ; remise de la sauvegarde"
+	ui_print "ERROR: $1; putting the backup back"
 	for f in $LIST; do [ -d $S/$f ] && [ ! -L $S/$f ] && rm -rf $S/$f || rm -f $S/$f; done
-	(cd $S && tar -xpf $BK/system.tar) || ui_print "remise impossible : flasher le zip supersu-restore"
+	(cd $S && tar -xpf $BK/system.tar) || ui_print "cannot put it back: flash the supersu-restore zip"
 	while read -r c f; do chcon -h $c $S/$f 2>/dev/null; done < $BK/contexts.txt
-	abort "SuperSU laisse en place"
+	abort "SuperSU left in place"
 }
 is_elf() { [ -f "$1" ] && [ ! -L "$1" ] && [ "$(head -c 4 "$1" | tail -c 3)" = ELF ]; }
 
@@ -135,8 +135,8 @@ for d in $DAPPS; do rm -rf $DATAAPP/$d; done
 [ -e $S/xbin/daemonsu ] && rollback "daemonsu encore present"
 sync
 ui_print " "
-ui_print "SuperSU retire. Redemarrer : le root passe par KernelSU Next"
-ui_print "(appli KernelSU Next, liste Superuser : y autoriser les applis LibreHU)."
-ui_print "Retour : zip supersu-restore (sauvegarde $BK)."
+ui_print "SuperSU removed. Reboot: root now goes through KernelSU Next"
+ui_print "(KernelSU Next app, Superuser list: allow the LibreHU apps there)."
+ui_print "To go back: supersu-restore zip (backup $BK)."
 cleanup
 exit 0

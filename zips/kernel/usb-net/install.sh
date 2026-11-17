@@ -5,39 +5,39 @@
 # dm-verity : s'arrete sans rien modifier si /vendor est verifie.
 # Retour : zip usb-net-restore.
 
-ui_print "UJC201 - Ethernet USB et partage de connexion USB"
+ui_print "UJC201 - USB Ethernet and USB tethering"
 ui_print "-------------------------------------------------"
 KREL=$(uname -r)
-ui_print "noyau (recovery) : $KREL"
-[ -n "$UJC_TEST" ] || [ "$KREL" = "4.9.117+" ] || abort "noyau $KREL : ces modules sont pour le noyau stock 4.9.117+"
+ui_print "kernel (recovery): $KREL"
+[ -n "$UJC_TEST" ] || [ "$KREL" = "4.9.117+" ] || abort "kernel $KREL: these modules are for the stock 4.9.117+ kernel"
 mount_rw
 require_no_verity vendor
 TMPD=${UJC_TMP:-/tmp}/ujc201_usbnet; rm -rf $TMPD; mkdir -p $TMPD
-unzip -o -q "$ZIPFILE" 'files/*' -d $TMPD || abort "extraction du zip impossible"
+unzip -o -q "$ZIPFILE" 'files/*' -d $TMPD || abort "cannot extract the zip"
 # empreintes (sha256sum -c n'existe pas dans tous les TWRP : comparaison une par une)
 while read -r SUM NAME; do
-	[ "$(sha256sum $TMPD/files/modules/$NAME | cut -d' ' -f1)" = "$SUM" ] || abort "empreinte de $NAME incorrecte"
+	[ "$(sha256sum $TMPD/files/modules/$NAME | cut -d' ' -f1)" = "$SUM" ] || abort "wrong checksum for $NAME"
 done < $TMPD/files/modules/SHA256SUMS
 
 DST=$VENMNT/lib/modules/librehu-usbnet
-rm -rf $DST; mkdir -p $DST || abort "dossier $DST impossible (vendor plein ?)"
+rm -rf $DST; mkdir -p $DST || abort "cannot create folder $DST (vendor full?)"
 for ko in $TMPD/files/modules/*.ko; do
-	cp $ko $DST/ || abort "copie de $(basename $ko) impossible (vendor plein ?)"
+	cp $ko $DST/ || abort "cannot copy $(basename $ko) (vendor full?)"
 done
 chmod 0755 $DST; chmod 0644 $DST/*.ko; chown -R 0:0 $DST 2>/dev/null
 [ -z "$UJC_TEST" ] && chcon -R u:object_r:vendor_file:s0 $DST
-ui_print "$DST : $(ls $DST | wc -l) modules"
+ui_print "$DST: $(ls $DST | wc -l) modules"
 
 RC=$VENMNT/etc/init/init.librehu_usbnet.rc
-cp $TMPD/files/init.librehu_usbnet.rc $RC || abort "copie de $RC impossible"
+cp $TMPD/files/init.librehu_usbnet.rc $RC || abort "cannot copy $RC"
 chmod 0644 $RC; chown 0:0 $RC 2>/dev/null
 [ -z "$UJC_TEST" ] && chcon u:object_r:vendor_configs_file:s0 $RC
 ui_print "$RC"
 rm -rf $TMPD
 
 ui_print " "
-ui_print "Termine. Redemarrer : les pilotes se chargent une fois Android demarre."
-ui_print "Etat et reactivation : LibreHU-service, carte Ethernet."
-ui_print "Retour arriere : flasher le zip usb-net-restore"
+ui_print "Done. Reboot: the drivers load once Android has started."
+ui_print "State and re-enabling: LibreHU-service, Ethernet card."
+ui_print "To go back: flash the usb-net-restore zip"
 cleanup
 exit 0

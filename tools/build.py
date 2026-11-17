@@ -46,7 +46,7 @@ def update_binary(meta, version, body):
     if devices:
         check = (
             'DEV=$(getprop ro.product.device)\n'
-            f'case " {devices} " in *" $DEV "*) ;; *) abort "appareil \\"$DEV\\" non pris en charge ({devices})";; esac\n'
+            f'case " {devices} " in *" $DEV "*) ;; *) abort "device \\"$DEV\\" not supported ({devices})";; esac\n'
         )
     head = f'#!/sbin/sh\nOUTFD=$2; ZIPFILE=$3; ZIP_ID={meta["id"]}; VERSION={version}; V4A_VERSION={version}\n'
     return head + common + "\n" + check + body
@@ -99,7 +99,7 @@ def build(item_dir, meta, var):
     with zipfile.ZipFile(out, "w") as z:
         for name, data in (
             ("META-INF/com/google/android/update-binary", update_binary(meta, version, body)),
-            ("META-INF/com/google/android/updater-script", "# voir update-binary\n"),
+            ("META-INF/com/google/android/updater-script", "# see update-binary\n"),
         ):
             info = zipfile.ZipInfo(name, date_time=(2020, 1, 1, 0, 0, 0))
             info.external_attr = 0o755 << 16
