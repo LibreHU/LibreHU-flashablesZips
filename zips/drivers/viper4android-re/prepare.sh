@@ -3,8 +3,8 @@
 # $1 = dossier de travail : files/ y est rempli, version y est écrit.
 set -e
 W=$1
-VER=v2.1.1
-SHA=c8f769f9d9f470e47f8278d69615c899d54af3916d10291d853fbd299ee847a2
+VER=v2.1.2
+SHA=16155702c772c4ba68b2dd0bd8c0b3cc5c0d2811b8e9bf4fca99ebd1343342f3
 curl -fsSL -o "$W/module.zip" "https://github.com/likelikeslike/ViPERFX_RE/releases/download/$VER/ViPER4Android-RE-$VER.zip"
 echo "$SHA  $W/module.zip" | sha256sum -c -
 mkdir -p "$W/files" "$W/mod"
