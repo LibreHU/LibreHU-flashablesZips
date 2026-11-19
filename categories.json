@@ -41,6 +41,12 @@
           "id": "extra",
           "name": "Extra drivers",
           "name_fr": "Pilotes supplémentaires"
+        },
+        {
+          "id": "partition",
+          "name": "Boot partition",
+          "name_fr": "Partition boot",
+          "description_fr": "Taille de la partition boot (10 ou 32 Mio)."
         }
       ]
     },
@@ -54,6 +60,11 @@
           "id": "audio",
           "name": "Audio",
           "name_fr": "Audio"
+        },
+        {
+          "id": "wifi",
+          "name": "Wi-Fi",
+          "name_fr": "Wi-Fi"
         }
       ]
     },

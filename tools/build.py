@@ -9,6 +9,11 @@ replaced by the value of the entry, and prepare.sh gets the entry in the environ
 Sorting for LibreHU Apps: "subcategory" (one of its category in categories.json), "group" (zips shown on one card, with
 "group_name" / "group_description", each zip a "variant" of it), "order" (number, smaller first). "screenshots": PNG / JPEG
 paths, relative to the item or to the repository root, published next to the zips (shot-<name>).
+"prebuilt": {"repo", "tag", "asset"}: the zip is not built here but taken as it is from a release of another LibreHU
+repository (made and tested by that repository's CI: boot32 zips of the kernel, WPA3 zips of LineageOS 17.1), checked
+against the SHA-256 GitHub gives for the asset, version = date of the asset + start of its SHA-256. The hourly run of
+this workflow follows those releases: a new build there is republished here. "optional": true, a missing release or
+asset only leaves the zip out (not yet built), instead of failing.
 """
 import hashlib
 import json
@@ -17,6 +22,8 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,8 +89,50 @@ def expand(meta):
     return [(sub(meta, var), var) for var in variants]
 
 
+class Missing(Exception):
+    """prebuilt zip not published (yet)"""
+
+
+def github(url):
+    req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "LibreHU-zips"})
+    tok = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    if tok:
+        req.add_header("Authorization", f"Bearer {tok}")
+    return urllib.request.urlopen(req, timeout=120)
+
+
+def prebuilt(meta, out):
+    """Copies the release asset of meta["prebuilt"] to out; returns its version"""
+    p = meta["prebuilt"]
+    try:
+        rel = json.load(github(f"https://api.github.com/repos/{p['repo']}/releases/tags/{p['tag']}"))
+    except urllib.error.HTTPError as ex:
+        if ex.code == 404:
+            raise Missing(f"release {p['repo']} {p['tag']} not found")
+        raise
+    asset = next((a for a in rel.get("assets", []) if a["name"] == p["asset"]), None)
+    if asset is None:
+        raise Missing(f"{p['asset']} not in release {p['tag']}")
+    data = urllib.request.urlopen(urllib.request.Request(asset["browser_download_url"],
+                                                         headers={"User-Agent": "LibreHU-zips"}), timeout=300).read()
+    digest = hashlib.sha256(data).hexdigest()
+    want = (asset.get("digest") or "").removeprefix("sha256:")
+    if want and want != digest:
+        raise ValueError(f"{p['asset']}: SHA-256 differs from the one of the release")
+    open(out, "wb").write(data)
+    return f"{asset['updated_at'][:10].replace('-', '')}-{digest[:8]}"
+
+
 def build(item_dir, meta, var):
     zid = meta["id"]
+    if meta.get("prebuilt"):
+        out = os.path.join(DIST, f"{zid}.zip")
+        version = prebuilt(meta, out)
+        entry = {k: meta[k] for k in FIELDS if k in meta}
+        if "order" in entry:
+            entry["order"] = int(entry["order"])
+        entry.update(version=version, url=BASE + f"{zid}.zip", size=os.path.getsize(out), sha256=sha256(out))
+        return entry
     work = os.path.join(BUILD, zid)
     shutil.rmtree(work, ignore_errors=True)
     os.makedirs(os.path.join(work, "files"))
@@ -146,6 +195,10 @@ def main():
                     e = build(d, meta, var)
                     entries.append(e)
                     print(f"{e['category']}/{e['id']} {e['version']} {e['size']} B")
+                except Missing as ex:
+                    if not meta.get("optional"):
+                        failed.append(meta["id"])
+                    print(f"-- {meta['id']}: {ex}", file=sys.stderr)
                 except Exception as ex:  # one zip failing does not stop the others
                     failed.append(meta["id"])
                     print(f"!! {meta['id']}: {ex}", file=sys.stderr)

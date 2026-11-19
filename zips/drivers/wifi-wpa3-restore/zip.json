@@ -1,0 +1,21 @@
+{
+  "id": "wifi-wpa3-restore",
+  "name": "WPA3 retiré : wpa_supplicant d'origine",
+  "category": "drivers",
+  "description": "Remet le wpa_supplicant d'origine (HAL 1.1) depuis /sdcard/LibreHU/backup/wifi-hal11-orig et laisse LibreHU/no-wpa3 dans la mémoire interne : le zip LineageOS 17.1 ne le réinstalle plus.",
+  "warning": "LineageOS 17.1 seulement.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "subcategory": "wifi",
+  "group": "wifi-wpa3",
+  "group_name": "WPA3 (LineageOS 17.1)",
+  "variant": "Revenir au supplicant d'origine",
+  "order": 401,
+  "optional": true,
+  "prebuilt": {
+    "repo": "LibreHU/android_device_alps_ac8257_demo",
+    "tag": "wifi-wpa3-17.1",
+    "asset": "librehu_wifi_wpa3_restore_twrp.zip"
+  }
+}

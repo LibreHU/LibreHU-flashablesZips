@@ -1,0 +1,25 @@
+{
+  "id": "wifi-wpa3",
+  "name": "WPA3 pour LineageOS 17.1 (wpa_supplicant HAL 1.2)",
+  "category": "drivers",
+  "description": "Active WPA3 (SAE) et Enhanced Open (OWE) sous LineageOS 17.1 : Android 10 ne les propose qu'avec le HAL supplicant 1.2, celui du vendor Android 9 a le 1.1 alors que le pilote Wi-Fi sait faire SAE. Installe dans /vendor le wpa_supplicant de LineageOS 17.1 (bibliothèque pilote MediaTek) et le HAL 1.2, après vérification par la CI qu'il ne demande rien d'absent du vendor de l'unité ; originaux sauvegardés dans /sdcard/LibreHU/backup/wifi-hal11-orig. Le zip LineageOS 17.1 l'installe aussi. Republié ici à chaque build de la CI (release wifi-wpa3-17.1).",
+  "warning": "EXPÉRIMENTAL, LineageOS 17.1 seulement, vbmeta en VERIFICATION_DISABLED. Si le Wi-Fi ne revient pas après le redémarrage : zip « WPA3 retiré ».",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "wifi-wpa3-restore",
+  "upstream": "https://github.com/LibreHU/android_device_alps_ac8257_demo/tree/lineage-17.1/tools/flashable/wifi-wpa3.sh",
+  "license": "BSD-3-Clause (wpa_supplicant), GPL-2.0 / BSD (bibliothèque MediaTek)",
+  "subcategory": "wifi",
+  "group": "wifi-wpa3",
+  "group_name": "WPA3 (LineageOS 17.1)",
+  "group_description": "wpa_supplicant avec le HAL 1.2 pour WPA3 et OWE sous Android 10.",
+  "variant": "Installer",
+  "order": 400,
+  "optional": true,
+  "prebuilt": {
+    "repo": "LibreHU/android_device_alps_ac8257_demo",
+    "tag": "wifi-wpa3-17.1",
+    "asset": "librehu_wifi_wpa3_twrp.zip"
+  }
+}

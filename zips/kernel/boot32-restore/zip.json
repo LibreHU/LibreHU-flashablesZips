@@ -1,0 +1,22 @@
+{
+  "id": "boot32-restore",
+  "name": "Partition boot remise à 10 Mio",
+  "category": "kernel",
+  "description": "Retour à la table de partitions d'origine (boot 10 Mio) depuis les sauvegardes de /sdcard/LibreHU/boot32. Flasher d'abord un noyau de 10 Mio. Zip de la CI du noyau, republié tel quel.",
+  "warning": "Modifie la table de partitions. Redémarrer dans TWRP ensuite.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/experimental-4.19.325/tools/twrp/boot32",
+  "license": "GPL-2.0",
+  "subcategory": "partition",
+  "group": "boot32",
+  "group_name": "Partition boot 32 Mio",
+  "variant": "Revenir à 10 Mio",
+  "order": 301,
+  "prebuilt": {
+    "repo": "LibreHU/android_kernel_autochips_ac8257_4.9",
+    "tag": "latest-experimental-4.19.325",
+    "asset": "librehu_boot32_restore_twrp.zip"
+  }
+}
