@@ -4,3 +4,4 @@
 /dist/
 /cross-*.ini
 /subprojects/.wraplock
+/native-host.ini

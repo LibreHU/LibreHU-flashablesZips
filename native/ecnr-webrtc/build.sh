@@ -15,7 +15,11 @@ cd "$HERE"
 
 case "${1:-}" in
 host)
-    meson setup build-host -Ddefault_library=static --reconfigure 2>/dev/null || meson setup build-host -Ddefault_library=static
+    # rtc_base/trace_event.h of WebRTC 2.1 uses uint8_t without <cstdint>: some libstdc++ versions (GitHub's Ubuntu)
+    # do not bring it in transitively. -include cstdint for the whole build, subprojects included (machine file).
+    printf "[built-in options]\ncpp_args = ['-include', 'cstdint']\n" > native-host.ini
+    rm -rf build-host
+    meson setup build-host --native-file native-host.ini -Ddefault_library=static
     ninja -C build-host
     meson test -C build-host --print-errorlogs -v
     ;;
@@ -39,6 +43,7 @@ ar = '$TC/llvm-ar'
 strip = '$TC/llvm-strip'
 
 [built-in options]
+cpp_args = ['-include', 'cstdint']
 cpp_link_args = ['-static-libstdc++']
 
 [host_machine]
