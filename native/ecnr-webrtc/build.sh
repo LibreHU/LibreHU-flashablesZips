@@ -60,7 +60,9 @@ EOF
     "$TC/llvm-strip" --strip-unneeded -o "$SO" "$B/libEcnrForCustomer.so"
     # checks: machine, libraries needed (all LLNDK, nothing from the NDK such as libc++_shared.so), exports
     RE="$TC/llvm-readelf"
-    "$RE" -h "$SO" | grep -q "Machine: *$MACHINE" || { echo "$SO: not $MACHINE" >&2; exit 1; }
+    # outputs read into variables first: grep -q closing the pipe early would make pipefail fail the check
+    HEADER=$("$RE" -h "$SO")
+    case "$HEADER" in *"Machine:"*"$MACHINE"*) ;; *) echo "$SO: not $MACHINE" >&2; exit 1 ;; esac
     NEEDED=$("$RE" -d "$SO" | sed -n 's/.*(NEEDED).*\[\(.*\)\]/\1/p' | sort | tr '\n' ' ')
     for n in $NEEDED; do
         case "$n" in libc.so|libm.so|libdl.so|liblog.so) ;; *) echo "$SO needs $n" >&2; exit 1 ;; esac
