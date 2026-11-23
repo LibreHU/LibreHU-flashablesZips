@@ -1,0 +1,16 @@
+{
+  "id": "ecnr-webrtc",
+  "name": "Annulation d'écho et réduction de bruit WebRTC (appels)",
+  "category": "drivers",
+  "description": "Remplace la bibliothèque ECNR tierce du HAL audio (libEcnrForCustomer.so, uVoice, licence en ligne) par celle de LibreHU, basée sur WebRTC (webrtc-audio-processing 2.1) : annulation d'écho AEC3 (ou AECM), réduction de bruit, gain automatique, filtre passe-haut, pour le micro pendant les appels Bluetooth. Installée dans /vendor/lib et /vendor/lib64 ; l'original est sauvegardé une fois dans /sdcard/LibreHU/backup/ecnr-orig. Ensuite : LibreHU-service > Audio > Microphone > ECNR sur « Activé », réglages WebRTC juste dessous (appliqués même pendant un appel). Inutile sous la ROM LineageOS LibreHU : son zip l'installe et la met à jour.",
+  "warning": "dm-verity doit être désactivé sur /vendor (fastboot --disable-verity flash vbmeta vbmeta.img) : le zip s'arrête sinon, sans rien modifier.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "restore": "ecnr-webrtc-restore",
+  "upstream": "https://github.com/LibreHU/LibreHU-flashablesZips/tree/main/native/ecnr-webrtc",
+  "license": "Apache-2.0 (LibreHU), BSD-3-Clause (WebRTC), Apache-2.0 (abseil)",
+  "subcategory": "audio",
+  "order": 200,
+  "optional": true
+}

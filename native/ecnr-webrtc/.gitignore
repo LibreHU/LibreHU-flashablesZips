@@ -1,0 +1,6 @@
+/subprojects/*/
+/subprojects/packagecache/
+/build*/
+/dist/
+/cross-*.ini
+/subprojects/.wraplock

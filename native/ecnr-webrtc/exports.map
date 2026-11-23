@@ -1,0 +1,6 @@
+{
+  global:
+    AUDIO_ECNR_SYM;
+  local:
+    *;
+};

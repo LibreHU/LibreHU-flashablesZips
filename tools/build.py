@@ -13,7 +13,8 @@ paths, relative to the item or to the repository root, published next to the zip
 repository (made and tested by that repository's CI: boot32 zips of the kernel, WPA3 zips of LineageOS 17.1), checked
 against the SHA-256 GitHub gives for the asset, version = date of the asset + start of its SHA-256. The hourly run of
 this workflow follows those releases: a new build there is republished here. "optional": true, a missing release or
-asset only leaves the zip out (not yet built), instead of failing.
+asset only leaves the zip out (not yet built), instead of failing; same for a prepare.sh that exits with code 3 (what it
+downloads is not published yet).
 """
 import hashlib
 import json
@@ -141,7 +142,11 @@ def build(item_dir, meta, var):
     prepare = os.path.join(item_dir, "prepare.sh")
     if os.path.exists(prepare):
         env = dict(os.environ, **{"ZIP_" + k.upper(): v for k, v in var.items()})
-        subprocess.run(["sh", prepare, work], check=True, env=env)
+        r = subprocess.run(["sh", prepare, work], env=env)
+        if r.returncode == 3:
+            raise Missing("prepare.sh: what it needs is not published yet")
+        if r.returncode:
+            raise subprocess.CalledProcessError(r.returncode, prepare)
     version = meta.get("version") or open(os.path.join(work, "version")).read().strip()
     body = open(os.path.join(item_dir, "install.sh")).read()
     out = os.path.join(DIST, f"{zid}.zip")

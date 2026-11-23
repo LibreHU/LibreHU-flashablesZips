@@ -1,0 +1,16 @@
+{
+  "id": "ecnr-webrtc-restore",
+  "name": "ECNR WebRTC retiré (bibliothèque d'origine remise)",
+  "category": "drivers",
+  "description": "Remet la bibliothèque ECNR d'origine du vendor (sauvegarde /sdcard/LibreHU/backup/ecnr-orig faite par le zip ECNR WebRTC ou par la ROM LineageOS LibreHU), ou retire celle de LibreHU s'il n'y en avait pas. Crée /sdcard/LibreHU/no-ecnr-webrtc : le zip de la ROM LineageOS LibreHU ne la remet plus (le zip ECNR WebRTC supprime ce fichier).",
+  "warning": "dm-verity doit être désactivé sur /vendor.",
+  "devices": [
+    "ac8257_demo"
+  ],
+  "hidden": true,
+  "upstream": "https://github.com/LibreHU/LibreHU-flashablesZips/tree/main/native/ecnr-webrtc",
+  "license": "AGPL-3.0-or-later",
+  "subcategory": "audio",
+  "order": 201,
+  "version": "1.0"
+}

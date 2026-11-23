@@ -1,0 +1,89 @@
+name: WebRTC ECNR library
+
+# libEcnrForCustomer.so of LibreHU (native/ecnr-webrtc): host build and test (echo, near-end talk, noise, rates), then
+# the Android builds (armeabi-v7a and arm64-v8a, NDK, API 28), checked (libraries needed, exports), published in the
+# release "ecnr-webrtc" (taken by the zip ecnr-webrtc of this repository and by the LibreHU LineageOS ROM zips), then
+# the zips are rebuilt (build.yml).
+on:
+  push:
+    branches: [main]
+    paths:
+      - native/ecnr-webrtc/**
+      - .github/workflows/ecnr-webrtc.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: ecnr-webrtc
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Meson and ninja
+        run: pip install --user meson==1.6.1 ninja && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Host build and test
+        run: native/ecnr-webrtc/build.sh host
+
+      - name: Android builds (armeabi-v7a, arm64-v8a)
+        run: |
+          echo "NDK: $ANDROID_NDK_LATEST_HOME"
+          for abi in armeabi-v7a arm64-v8a; do
+            native/ecnr-webrtc/build.sh android $abi "$PWD/out"
+          done
+
+      - name: Version, checksums, notices
+        run: |
+          cd out
+          echo "1.0-r${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}" > version
+          W=../native/ecnr-webrtc/subprojects
+          {
+            echo "libEcnrForCustomer.so - LibreHU WebRTC ECNR $(cat version)"
+            echo "Source: https://github.com/${GITHUB_REPOSITORY}/tree/${GITHUB_SHA}/native/ecnr-webrtc"
+            echo
+            echo "== LibreHU code (ecnr_webrtc.cpp): Apache License 2.0"
+            echo
+            echo "== WebRTC audio processing (webrtc-audio-processing 2.1, https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing):"
+            cat $W/webrtc-audio-processing/COPYING
+            echo
+            echo "== Abseil (https://github.com/abseil/abseil-cpp), Apache License 2.0:"
+            cat $W/abseil-cpp-*/LICENSE
+            echo
+            echo "== LLVM libc++ / libc++abi (Android NDK, linked statically), Apache License 2.0 with LLVM Exceptions"
+          } > NOTICE
+          sha256sum libEcnrForCustomer_armeabi-v7a.so libEcnrForCustomer_arm64-v8a.so version NOTICE > SHA256SUMS
+          cat SHA256SUMS
+          ls -la
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ecnr-webrtc
+          path: out/
+
+      - name: Publish (release "ecnr-webrtc") and rebuild the zips
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=ecnr-webrtc
+          {
+            echo "libEcnrForCustomer.so de LibreHU (annulation d'écho et réduction de bruit WebRTC pour les appels),"
+            echo "version \`$(cat out/version)\`, commit ${GITHUB_SHA::7}. Source et explications : \`native/ecnr-webrtc\`."
+            echo
+            echo "S'installe par le zip \`ecnr-webrtc\` (release \`zips\`, LibreHU Apps) ou par le zip de la ROM LineageOS LibreHU."
+          } > notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "WebRTC ECNR" --notes-file notes.md --latest=false
+          else
+            gh release create "$TAG" --title "WebRTC ECNR" --notes-file notes.md --latest=false
+          fi
+          gh release upload "$TAG" out/* --clobber
+          gh workflow run build.yml --ref main
