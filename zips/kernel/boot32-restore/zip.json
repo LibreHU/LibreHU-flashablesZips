@@ -7,7 +7,7 @@
   "devices": [
     "ac8257_demo"
   ],
-  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/experimental-4.19.325/tools/twrp/boot32",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/rc-4.19.325/tools/twrp/boot32",
   "license": "GPL-2.0",
   "subcategory": "partition",
   "group": "boot32",
@@ -16,7 +16,7 @@
   "order": 301,
   "prebuilt": {
     "repo": "LibreHU/android_kernel_autochips_ac8257_4.9",
-    "tag": "latest-experimental-4.19.325",
+    "tag": "latest-rc-4.19.325",
     "asset": "librehu_boot32_restore_twrp.zip"
   }
 }

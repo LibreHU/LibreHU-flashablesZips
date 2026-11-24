@@ -2,13 +2,13 @@
   "id": "boot32",
   "name": "Partition boot agrandie à 32 Mio (Android 10 et plus)",
   "category": "kernel",
-  "description": "Passe la partition boot de 10 à 32 Mio pour les noyaux 4.19 ThinLTO (variantes -lto32) d'Android 10 et plus : dtbo et tee déplacés, vendor réduit de 2048 à 2033 Mio. Vérifications en lecture seule d'abord, sauvegardes (GPT, boot, dtbo, tee1, tee2, vendor) dans /sdcard/LibreHU/boot32, table de partitions écrite en dernier. Zip construit et testé par la CI du noyau (release latest-experimental-4.19.325), republié ici tel quel à chaque nouveau build. Le zip LineageOS 17.1 le lance seul si besoin.",
+  "description": "Passe la partition boot de 10 à 32 Mio pour les noyaux 4.19 ThinLTO (variantes -lto32) d'Android 10 et plus : dtbo et tee déplacés, vendor réduit de 2048 à 2033 Mio. Vérifications en lecture seule d'abord, sauvegardes (GPT, boot, dtbo, tee1, tee2, vendor) dans /sdcard/LibreHU/boot32, table de partitions écrite en dernier. Zip construit et testé par la CI du noyau (release latest-rc-4.19.325), republié ici tel quel à chaque nouveau build. Le zip LineageOS 17.1 le lance seul si besoin.",
   "warning": "Modifie la table de partitions. Prérequis : sauvegarde SP Flash Tool complète (Readback), vbmeta en VERIFICATION_DISABLED, 4,4 Go libres dans la mémoire interne. Redémarrer dans TWRP ensuite (le noyau de TWRP relit la table au démarrage). Retour : zip « Partition boot remise à 10 Mio ».",
   "devices": [
     "ac8257_demo"
   ],
   "restore": "boot32-restore",
-  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/experimental-4.19.325/tools/twrp/boot32",
+  "upstream": "https://github.com/LibreHU/android_kernel_autochips_ac8257_4.9/tree/rc-4.19.325/tools/twrp/boot32",
   "license": "GPL-2.0",
   "subcategory": "partition",
   "group": "boot32",
@@ -18,7 +18,7 @@
   "order": 300,
   "prebuilt": {
     "repo": "LibreHU/android_kernel_autochips_ac8257_4.9",
-    "tag": "latest-experimental-4.19.325",
+    "tag": "latest-rc-4.19.325",
     "asset": "librehu_boot32_twrp.zip"
   }
 }
